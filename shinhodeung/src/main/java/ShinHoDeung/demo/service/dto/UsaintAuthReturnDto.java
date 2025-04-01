@@ -1,0 +1,23 @@
+package ShinHoDeung.demo.service.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class UsaintAuthReturnDto {
+    private Integer id;
+    private String name;
+    private String major;
+    private String status;
+    private String semester;
+
+    // @NotNull
+    // public StudentLoginParamDto toStudentLoginParamDto(){
+    //     return StudentLoginParamDto.builder()
+    //             .id(this.id)
+    //             .name(this.name)
+    //             .major(this.major)
+    //             .build();
+    // }
+}
