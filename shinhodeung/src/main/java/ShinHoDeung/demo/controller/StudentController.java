@@ -1,5 +1,6 @@
 package ShinHoDeung.demo.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +16,14 @@ public class StudentController {
     private final AuthService authService;
     
     @PostMapping("/login")
-    public String login(@RequestBody StudentLoginRequestDto studentLoginRequestDto) {
+    public ResponseEntity login(@RequestBody StudentLoginRequestDto studentLoginRequestDto) {
         UsaintAuthReturnDto usaintAuthReturnDto;
         
         try{
             usaintAuthReturnDto = authService.uSaintAuth(studentLoginRequestDto.toUsaintAuthParamDto());
         } catch(Exception e){
             e.printStackTrace();
-            return "";
+            return ResponseEntity.badRequest().build();
         }
         
         String result = "";
@@ -32,6 +33,8 @@ public class StudentController {
         result = result + String.format("status : %s \n", usaintAuthReturnDto.getStatus());
         result = result + String.format("semester : %s \n", usaintAuthReturnDto.getSemester());
         
-        return result;
+        return ResponseEntity.ok()
+                             .header("Content-Type", "application/json; charset=UTF-8")  // 응답의 인코딩을 UTF-8로 설정
+                             .body(result);
     }
 }
