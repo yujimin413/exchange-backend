@@ -28,19 +28,19 @@ public class StudentController {
     private final StatusCode statusCode;
     
     @PostMapping("/login")
-    public CommonResponse login(@RequestBody StudentLoginRequestDto studentLoginRequestDto) {
+    public ResponseEntity login(@RequestBody StudentLoginRequestDto studentLoginRequestDto) {
         UsaintAuthReturnDto usaintAuthReturnDto;
         
         try{
             usaintAuthReturnDto = authService.uSaintAuth(studentLoginRequestDto.toUsaintAuthParamDto());
         } catch (AuthFailedException e) {
-            return new CommonResponse(statusCode.SSU4010, null, statusCode.SSU4010_MSG);
+            return new CommonResponse(statusCode.SSU4010, null, statusCode.SSU4010_MSG).toResponseEntity();
         } catch (APIRequestFailedException | HTMLParseFailedException e) {
-            return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
+            return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG).toResponseEntity();
         }
 
         StudentLoginReturnDto studentLoginReturnDto = studentService.studentLogin(usaintAuthReturnDto.toStudentLoginParamDto());
         
-        return new CommonResponse(statusCode.SSU2010, studentLoginReturnDto.toStudentLoginResponseDto(), statusCode.SSU2010_MSG);
+        return new CommonResponse(statusCode.SSU2010, studentLoginReturnDto.toStudentLoginResponseDto(), statusCode.SSU2010_MSG).toResponseEntity();
     }
 }
