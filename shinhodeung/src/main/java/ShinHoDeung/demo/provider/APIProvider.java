@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import ShinHoDeung.demo.provider.dto.APIRequestDto;
@@ -16,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class APIProvider {
-    public APIResponseDto get(APIRequestDto apiRequestDto) throws Exception {
+
+    @NotNull
+    public APIResponseDto get(@NotNull APIRequestDto apiRequestDto) throws Exception {
         
         String urlString = apiRequestDto.getUrl();
         Map<String, String> headers = apiRequestDto.getHeaders();

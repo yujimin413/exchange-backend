@@ -1,5 +1,7 @@
 package ShinHoDeung.demo.service.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,12 +14,12 @@ public class UsaintAuthReturnDto {
     private String status;
     private String semester;
 
-    // @NotNull
-    // public StudentLoginParamDto toStudentLoginParamDto(){
-    //     return StudentLoginParamDto.builder()
-    //             .id(this.id)
-    //             .name(this.name)
-    //             .major(this.major)
-    //             .build();
-    // }
+    @NotNull
+    public StudentLoginParamDto toStudentLoginParamDto(){
+        return StudentLoginParamDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .major(this.major)
+                .build();
+    }
 }

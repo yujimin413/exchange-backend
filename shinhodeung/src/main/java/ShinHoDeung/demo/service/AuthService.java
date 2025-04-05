@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,7 +31,8 @@ public class AuthService {
     private final APIProvider apiProvider;
     private final GlobalVariable globalVariable;
 
-    public UsaintAuthReturnDto uSaintAuth(UsaintAuthParamDto usaintAuthLoginDto)throws APIRequestFailedException, AuthFailedException, HTMLParseFailedException{
+    @NotNull
+    public UsaintAuthReturnDto uSaintAuth(@NotNull UsaintAuthParamDto usaintAuthLoginDto)throws APIRequestFailedException, AuthFailedException, HTMLParseFailedException{
         String sToken = usaintAuthLoginDto.getSToken();
         Integer sIdno = usaintAuthLoginDto.getSIdno();
 

@@ -24,7 +24,8 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 //	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -34,6 +35,10 @@ dependencies {
 
 	implementation 'org.jetbrains:annotations:23.0.0' //@NotNull
 	implementation 'org.jsoup:jsoup:1.16.1' // AuthService: html parsing
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' // javax.xml.bind : Jwts.signwith()에서 필요
+	runtimeOnly 'com.h2database:h2' //일단은~ 인메모리 디비!
 }
 
 tasks.named('test') {
