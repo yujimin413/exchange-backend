@@ -15,11 +15,4 @@ public class CommonResponse {
         this.data = data;
         this.message = message;
     }
-
-    public ResponseEntity toResponseEntity(){
-        return ResponseEntity
-        .ok()
-        .header("Content-Type", "application/json;charset=UTF-8")
-        .body(this);
-    }
 }

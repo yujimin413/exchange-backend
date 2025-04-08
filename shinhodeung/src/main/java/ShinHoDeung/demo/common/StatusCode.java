@@ -43,4 +43,16 @@ public class StatusCode {
     public final String SSU4010_MSG = "Failed to authenticate with uSaint";
 
     // ==================================================================
+
+    // ==================================================================
+    // Profile (02)
+
+    /**
+     * SSU2020
+     */
+    public final String SSU2020 = "SSU2020";
+    public final String SSU2020_MSG = "Get profile success";
+
+    //
+    // ==================================================================
 }

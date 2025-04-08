@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.jetbrains.annotations.NotNull;
 
+import ShinHoDeung.demo.controller.dto.StudentProfileResponseDto;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,12 +51,12 @@ public class Student {
     //             .build();
     // }
 
-    // @NotNull
-    // public StudentProfileResponseDto toStudentProfileResponseDto(){
-    //     return StudentProfileResponseDto.builder()
-    //             .studentId(this.id)
-    //             .name(this.name)
-    //             .major(this.major)
-    //             .build();
-    // }
+    @NotNull
+    public StudentProfileResponseDto toStudentProfileResponseDto(){
+        return StudentProfileResponseDto.builder()
+                .studentId(this.id)
+                .name(this.name)
+                .major(this.major)
+                .build();
+    }
 }
