@@ -50,7 +50,7 @@ public class StatusCode {
     /**
      * SSU2020
      */
-    public final String SSU2020 = "SSU2020";
+    public final String SSU2020 = "2020";
     public final String SSU2020_MSG = "Get profile success";
 
     //
