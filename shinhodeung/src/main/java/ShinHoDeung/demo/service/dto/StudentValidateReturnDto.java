@@ -2,7 +2,7 @@ package ShinHoDeung.demo.service.dto;
 
 import java.util.Optional;
 
-import ShinHoDeung.demo.entity.Student;
+import ShinHoDeung.demo.domain.Student;
 import lombok.Builder;
 import lombok.Data;
 

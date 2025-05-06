@@ -1,7 +1,7 @@
-package ShinHoDeung.demo.entity;
+package ShinHoDeung.demo.domain;
 
 // import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+// import org.springframework.data.redis.core.RedisHash;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

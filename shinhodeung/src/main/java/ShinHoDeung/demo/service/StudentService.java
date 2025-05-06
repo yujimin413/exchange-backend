@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import ShinHoDeung.demo.entity.RefreshToken;
-import ShinHoDeung.demo.entity.Student;
+import ShinHoDeung.demo.domain.RefreshToken;
+import ShinHoDeung.demo.domain.Student;
 import ShinHoDeung.demo.provider.TokenProvider;
 import ShinHoDeung.demo.repository.RefreshTokenRepository;
 import ShinHoDeung.demo.repository.StudentRepository;

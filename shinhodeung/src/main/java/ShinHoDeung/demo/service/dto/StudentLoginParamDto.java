@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import org.jetbrains.annotations.NotNull;
 
-import ShinHoDeung.demo.entity.Student;
+import ShinHoDeung.demo.domain.Student;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import lombok.Builder;
 import lombok.Data;

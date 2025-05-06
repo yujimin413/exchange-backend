@@ -1,12 +1,11 @@
 package ShinHoDeung.demo.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import ShinHoDeung.demo.entity.Student;
+import ShinHoDeung.demo.domain.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     @NotNull

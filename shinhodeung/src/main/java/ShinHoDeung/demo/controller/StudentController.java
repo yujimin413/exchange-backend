@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.StudentLoginRequestDto;
-import ShinHoDeung.demo.entity.Student;
+import ShinHoDeung.demo.domain.Student;
 import ShinHoDeung.demo.exception.APIRequestFailedException;
 import ShinHoDeung.demo.exception.AuthFailedException;
 import ShinHoDeung.demo.exception.HTMLParseFailedException;

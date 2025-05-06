@@ -1,4 +1,4 @@
-package ShinHoDeung.demo.entity;
+package ShinHoDeung.demo.domain;
 
 import java.sql.Timestamp;
 
