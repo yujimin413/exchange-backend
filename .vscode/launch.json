@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ExchangeStudentApplication<demo-shinhodeung>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ShinHoDeung.demo.ExchangeStudentApplication",
+            "projectName": "demo-shinhodeung",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
