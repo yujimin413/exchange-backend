@@ -1,20 +1,17 @@
 package ShinHoDeung.demo.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 // import org.springframework.data.annotation.Id;
 // import org.springframework.data.redis.core.RedisHash;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@RedisHash(value = "refreshToken", timeToLive = 3600 * 24 * 120L)
 public class RefreshToken {
     @Id
     private String refreshToken;

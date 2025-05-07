@@ -38,7 +38,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359' // javax.xml.bind : Jwts.signwith()에서 필요
-	runtimeOnly 'com.h2database:h2' //일단은~ 인메모리 디비!
+	// runtimeOnly 'com.h2database:h2' //일단은~ 인메모리 디비!
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 }
 
 tasks.named('test') {
