@@ -2,13 +2,13 @@ package ShinHoDeung.demo.service.dto;
 
 import org.jetbrains.annotations.NotNull;
 
-import ShinHoDeung.demo.controller.dto.StudentLoginResponseDto;
+import ShinHoDeung.demo.controller.dto.UserLoginResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class StudentLoginReturnDto {
+public class UserLoginReturnDto {
     private String accessToken;
     private String refreshToken;
     private Integer studentId;
@@ -16,8 +16,8 @@ public class StudentLoginReturnDto {
     private String major;
 
     @NotNull
-    public StudentLoginResponseDto toStudentLoginResponseDto(){
-        return StudentLoginResponseDto.builder()
+    public UserLoginResponseDto toUserLoginResponseDto(){
+        return UserLoginResponseDto.builder()
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .studentId(this.studentId)

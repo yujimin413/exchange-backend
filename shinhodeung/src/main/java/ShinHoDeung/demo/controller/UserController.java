@@ -10,50 +10,50 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
-import ShinHoDeung.demo.controller.dto.StudentLoginRequestDto;
+import ShinHoDeung.demo.controller.dto.UserLoginRequestDto;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.exception.APIRequestFailedException;
 import ShinHoDeung.demo.exception.AuthFailedException;
 import ShinHoDeung.demo.exception.HTMLParseFailedException;
 import ShinHoDeung.demo.service.AuthService;
-import ShinHoDeung.demo.service.StudentService;
-import ShinHoDeung.demo.service.dto.StudentLoginReturnDto;
+import ShinHoDeung.demo.service.UesrService;
+import ShinHoDeung.demo.service.dto.UserLoginReturnDto;
 import ShinHoDeung.demo.service.dto.UsaintAuthReturnDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
-public class StudentController {
+public class UserController {
 
-    private final StudentService studentService;
+    private final UesrService userService;
     private final AuthService authService;
     private final StatusCode statusCode;
     
     @NotNull
     @PostMapping("/login")
-    public CommonResponse login(@RequestBody StudentLoginRequestDto studentLoginRequestDto) {
+    public CommonResponse login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         UsaintAuthReturnDto usaintAuthReturnDto;
         
         try{
-            usaintAuthReturnDto = authService.uSaintAuth(studentLoginRequestDto.toUsaintAuthParamDto());
+            usaintAuthReturnDto = authService.uSaintAuth(userLoginRequestDto.toUsaintAuthParamDto());
         } catch (AuthFailedException e) {
             return new CommonResponse(statusCode.SSU4010, null, statusCode.SSU4010_MSG);
         } catch (APIRequestFailedException | HTMLParseFailedException e) {
             return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
         }
 
-        StudentLoginReturnDto studentLoginReturnDto = studentService.studentLogin(usaintAuthReturnDto.toStudentLoginParamDto());
+        UserLoginReturnDto userLoginReturnDto = userService.userLogin(usaintAuthReturnDto.toUserLoginParamDto());
         
-        return new CommonResponse(statusCode.SSU2010, studentLoginReturnDto.toStudentLoginResponseDto(), statusCode.SSU2010_MSG);
+        return new CommonResponse(statusCode.SSU2010, userLoginReturnDto.toUserLoginResponseDto(), statusCode.SSU2010_MSG);
     }
 
     @NotNull
     @PostMapping("/profile")
     public CommonResponse profile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User student = (User) authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
 
-        return new CommonResponse(statusCode.SSU2020, student.toStudentProfileResponseDto(), statusCode.SSU2020_MSG);
+        return new CommonResponse(statusCode.SSU2020, user.toUserProfileResponseDto(), statusCode.SSU2020_MSG);
     }
 }

@@ -113,9 +113,9 @@ public class AuthService {
             log.debug(uSaintPortalResponseBody);
             throw new HTMLParseFailedException();
         }
-        String studentName = uSaintPortalNameBoxSpan.text();
-        studentName = studentName.split("님")[0];
-        usaintAuthReturnDto.setName(studentName);
+        String userName = uSaintPortalNameBoxSpan.text();
+        userName = userName.split("님")[0];
+        usaintAuthReturnDto.setName(userName);
 
         Elements uSaintPortalInfoBoxLis = uSaintPortalInfoBox.getElementsByTag("li");
 

@@ -15,8 +15,8 @@ public class UsaintAuthReturnDto {
     private String semester;
 
     @NotNull
-    public StudentLoginParamDto toStudentLoginParamDto(){
-        return StudentLoginParamDto.builder()
+    public UserLoginParamDto toUserLoginParamDto(){
+        return UserLoginParamDto.builder()
                 .id(this.id)
                 .name(this.name)
                 .major(this.major)

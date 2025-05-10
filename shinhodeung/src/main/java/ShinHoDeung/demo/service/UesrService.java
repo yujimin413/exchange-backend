@@ -11,10 +11,10 @@ import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.provider.TokenProvider;
 import ShinHoDeung.demo.repository.RefreshTokenRepository;
 import ShinHoDeung.demo.repository.UserRepository;
-import ShinHoDeung.demo.service.dto.StudentLoginParamDto;
-import ShinHoDeung.demo.service.dto.StudentLoginReturnDto;
-import ShinHoDeung.demo.service.dto.StudentValidateParamDto;
-import ShinHoDeung.demo.service.dto.StudentValidateReturnDto;
+import ShinHoDeung.demo.service.dto.UserLoginParamDto;
+import ShinHoDeung.demo.service.dto.UserLoginReturnDto;
+import ShinHoDeung.demo.service.dto.UserValidateParamDto;
+import ShinHoDeung.demo.service.dto.UserValidateReturnDto;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -23,118 +23,118 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class StudentService {
+public class UesrService {
     
-    private final UserRepository studentRepository;
+    private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
 
     @NotNull
-    public StudentLoginReturnDto studentLogin(@NotNull StudentLoginParamDto studentLoginParamDto){
-        Optional<User> studentOptional = studentRepository.findByStudentId(studentLoginParamDto.getId());
-        User student;
+    public UserLoginReturnDto userLogin(@NotNull UserLoginParamDto userLoginParamDto){
+        Optional<User> userOptional = userRepository.findByStudentId(userLoginParamDto.getId());
+        User user;
 
-        if(studentOptional.isEmpty()){
-            student = studentLoginParamDto.toStudent();
+        if(userOptional.isEmpty()){
+            user = userLoginParamDto.toUser();
         }
         else{
-            student = studentOptional.get();
-            student.setStudentId(studentLoginParamDto.getId());
-            student.setMajor(studentLoginParamDto.getMajor());
-            student.setUserName(studentLoginParamDto.getName());
+            user = userOptional.get();
+            user.setStudentId(userLoginParamDto.getId());
+            user.setMajor(userLoginParamDto.getMajor());
+            user.setUserName(userLoginParamDto.getName());
         }
-        studentRepository.save(student);
+        userRepository.save(user);
 
-        String accessToken = tokenProvider.generateAccessToken(studentLoginParamDto.toJWTPayloadVO());
+        String accessToken = tokenProvider.generateAccessToken(userLoginParamDto.toJWTPayloadVO());
         String refreshToken = tokenProvider.generateRandomHashToken(50);
 
         RefreshToken refreshTokenDB = RefreshToken.builder()
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
-                .studentId(student.getStudentId())
-                .name(student.getUserName())
-                .major(student.getMajor())
+                .studentId(user.getStudentId())
+                .name(user.getUserName())
+                .major(user.getMajor())
                 .build();
         refreshTokenRepository.save(refreshTokenDB);
 
-        return StudentLoginReturnDto.builder()
+        return UserLoginReturnDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .studentId(student.getStudentId())
-                .name(student.getUserName())
-                .major(student.getMajor())
+                .studentId(user.getStudentId())
+                .name(user.getUserName())
+                .major(user.getMajor())
                 .build();
     }
 
     @NotNull
-    public StudentValidateReturnDto validateStudent(@NotNull StudentValidateParamDto studentValidateParamDto) throws Exception {
+    public UserValidateReturnDto validateUser(@NotNull UserValidateParamDto userValidateParamDto) throws Exception {
         JWTPayloadVo jwtPayloadVO;
         try {
-            jwtPayloadVO = tokenProvider.validateAccessToken(studentValidateParamDto.getAccessToken());
+            jwtPayloadVO = tokenProvider.validateAccessToken(userValidateParamDto.getAccessToken());
         } catch(BadCredentialsException e){
             log.warn(e.getMessage(), e);
             throw new Exception("Invalid access token.");
         } catch(ExpiredJwtException e){
             log.debug(e.getMessage(), e);
 
-            Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(studentValidateParamDto.getRefreshToken());
+            Optional<RefreshToken> refreshTokenOptional = refreshTokenRepository.findById(userValidateParamDto.getRefreshToken());
             if(refreshTokenOptional.isEmpty()){
                 throw new Exception("Refresh token does not exist.");
             }
 
             RefreshToken refreshToken = refreshTokenOptional.get();
-            if(!refreshToken.getAccessToken().equals(studentValidateParamDto.getAccessToken())){
+            if(!refreshToken.getAccessToken().equals(userValidateParamDto.getAccessToken())){
                 throw new Exception("Access token and refresh token does not match.");
             }
 
-            Optional<User> studentOptional = studentRepository.findById(refreshToken.getStudentId());
-            if(studentOptional.isEmpty()){
+            Optional<User> userOptional = userRepository.findById(refreshToken.getStudentId());
+            if(userOptional.isEmpty()){
                 throw new Exception("Student does not exist.");
             }
 
-            User student = studentOptional.get();
+            User user = userOptional.get();
 
-            if(!student.getMajor().equals(refreshToken.getMajor())){
+            if(!user.getMajor().equals(refreshToken.getMajor())){
                 throw new Exception("Student major has changed.");
             }
-            else if(!student.getUserName().equals(refreshToken.getName())){
+            else if(!user.getUserName().equals(refreshToken.getName())){
                 throw new Exception("Student name has changed.");
             }
 
-            String newAccessToken = tokenProvider.generateAccessToken(student.toJWTPayloadVO());
+            String newAccessToken = tokenProvider.generateAccessToken(user.toJWTPayloadVO());
             String newRefreshToken = tokenProvider.generateRandomHashToken(50);
 
             RefreshToken newRefreshTokenDB = RefreshToken.builder()
                     .refreshToken(newRefreshToken)
                     .accessToken(newAccessToken)
-                    .studentId(student.getStudentId())
-                    .name(student.getUserName())
-                    .major(student.getMajor())
+                    .studentId(user.getStudentId())
+                    .name(user.getUserName())
+                    .major(user.getMajor())
                     .build();
 
             refreshTokenRepository.save(newRefreshTokenDB);
             refreshTokenRepository.delete(refreshToken);
 
-            return StudentValidateReturnDto.builder()
-                    .student(student)
+            return UserValidateReturnDto.builder()
+                    .user(user)
                     .accessToken(Optional.of(newAccessToken))
                     .refreshToken(Optional.ofNullable(newRefreshToken))
                     .build();
         }
 
-        Optional<User> student = studentRepository.findById(jwtPayloadVO.getStudentId());
-        if(student.isEmpty()){
+        Optional<User> user = userRepository.findById(jwtPayloadVO.getStudentId());
+        if(user.isEmpty()){
             throw new Exception("Student does not exist.");
         }
-        else if(!student.get().getMajor().equals(jwtPayloadVO.getMajor())){
+        else if(!user.get().getMajor().equals(jwtPayloadVO.getMajor())){
             throw new Exception("Student major has changed.");
         }
-        else if(!student.get().getUserName().equals(jwtPayloadVO.getName())){
+        else if(!user.get().getUserName().equals(jwtPayloadVO.getName())){
             throw new Exception("Student name has changed.");
         }
 
-        return StudentValidateReturnDto.builder()
-                .student(student.get())
+        return UserValidateReturnDto.builder()
+                .user(user.get())
                 .accessToken(Optional.empty())
                 .refreshToken(Optional.empty())
                 .build();

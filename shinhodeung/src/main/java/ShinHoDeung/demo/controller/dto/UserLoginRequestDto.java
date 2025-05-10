@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Setter
 @NoArgsConstructor
-public class StudentLoginRequestDto {
+public class UserLoginRequestDto {
     @JsonProperty("sToken")
     @NotNull
     private String sToken;

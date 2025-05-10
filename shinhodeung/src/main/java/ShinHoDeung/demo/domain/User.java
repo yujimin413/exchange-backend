@@ -2,7 +2,7 @@ package ShinHoDeung.demo.domain;
 
 import org.jetbrains.annotations.NotNull;
 
-import ShinHoDeung.demo.controller.dto.StudentProfileResponseDto;
+import ShinHoDeung.demo.controller.dto.UserProfileResponseDto;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,8 +56,8 @@ public class User {
     // }
 
     @NotNull
-    public StudentProfileResponseDto toStudentProfileResponseDto(){
-        return StudentProfileResponseDto.builder()
+    public UserProfileResponseDto toUserProfileResponseDto(){
+        return UserProfileResponseDto.builder()
                 .studentId(this.studentId)
                 .name(this.userName)
                 .major(this.major)

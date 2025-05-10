@@ -8,8 +8,8 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudentValidateReturnDto {
-    private User student;
+public class UserValidateReturnDto {
+    private User user;
     private Optional<String> accessToken;
     private Optional<String> refreshToken;
 }

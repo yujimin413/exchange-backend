@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudentProfileResponseDto {
+public class UserLoginResponseDto {
+    private String accessToken;
+    private String refreshToken;
     private Integer studentId;
     private String name;
     private String major;

@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudentLoginParamDto {
+public class UserLoginParamDto {
     private Integer id;
     private String name;
     private String major;
@@ -24,7 +24,7 @@ public class StudentLoginParamDto {
     }
 
     @NotNull
-    public User toStudent(){
+    public User toUser(){
         return User.builder()
                 .studentId(this.id)
                 .userName(this.name)

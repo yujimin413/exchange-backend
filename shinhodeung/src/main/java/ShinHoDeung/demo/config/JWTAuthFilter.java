@@ -11,9 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import ShinHoDeung.demo.service.StudentService;
-import ShinHoDeung.demo.service.dto.StudentValidateParamDto;
-import ShinHoDeung.demo.service.dto.StudentValidateReturnDto;
+import ShinHoDeung.demo.service.UesrService;
+import ShinHoDeung.demo.service.dto.UserValidateParamDto;
+import ShinHoDeung.demo.service.dto.UserValidateReturnDto;
 import ShinHoDeung.demo.util.HTTPRequestUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     /**
      * DI
      */
-    private final StudentService studentService;
+    private final UesrService userService;
     private final HTTPRequestUtil httpRequestUtil;
 
     /**
@@ -49,20 +49,20 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                 throw new Exception("No refresh token provided.");
             }
 
-            StudentValidateParamDto studentValidateParamDto = StudentValidateParamDto.builder()
+            UserValidateParamDto userValidateParamDto = UserValidateParamDto.builder()
                     .accessToken(accessToken.get())
                     .refreshToken(refreshToken.get())
                     .build();
 
-            StudentValidateReturnDto studentValidateReturnDto = studentService.validateStudent(studentValidateParamDto);
-            if(studentValidateReturnDto.getAccessToken().isPresent()){
-                response.addHeader("Access-Token", studentValidateReturnDto.getAccessToken().get());
+            UserValidateReturnDto userValidateReturnDTO = userService.validateUser(userValidateParamDto);
+            if(userValidateReturnDTO.getAccessToken().isPresent()){
+                response.addHeader("Access-Token", userValidateReturnDTO.getAccessToken().get());
             }
-            if(studentValidateReturnDto.getRefreshToken().isPresent()){
-                response.addHeader("Refresh-Token", studentValidateReturnDto.getRefreshToken().get());
+            if(userValidateReturnDTO.getRefreshToken().isPresent()){
+                response.addHeader("Refresh-Token", userValidateReturnDTO.getRefreshToken().get());
             }
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(studentValidateReturnDto.getStudent(), "", List.of());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userValidateReturnDTO.getUser(), "", List.of());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
