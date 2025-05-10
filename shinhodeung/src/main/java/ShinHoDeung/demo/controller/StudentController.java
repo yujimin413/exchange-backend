@@ -1,19 +1,17 @@
 package ShinHoDeung.demo.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.StudentLoginRequestDto;
-import ShinHoDeung.demo.domain.Student;
+import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.exception.APIRequestFailedException;
 import ShinHoDeung.demo.exception.AuthFailedException;
 import ShinHoDeung.demo.exception.HTMLParseFailedException;
@@ -54,7 +52,7 @@ public class StudentController {
     @PostMapping("/profile")
     public CommonResponse profile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Student student = (Student) authentication.getPrincipal();
+        User student = (User) authentication.getPrincipal();
 
         return new CommonResponse(statusCode.SSU2020, student.toStudentProfileResponseDto(), statusCode.SSU2020_MSG);
     }

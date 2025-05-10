@@ -1,10 +1,8 @@
 package ShinHoDeung.demo.service.dto;
 
-import java.sql.Timestamp;
-
 import org.jetbrains.annotations.NotNull;
 
-import ShinHoDeung.demo.domain.Student;
+import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import lombok.Builder;
 import lombok.Data;
@@ -26,12 +24,11 @@ public class StudentLoginParamDto {
     }
 
     @NotNull
-    public Student toStudent(){
-        return Student.builder()
-                .id(this.id)
-                .name(this.name)
+    public User toStudent(){
+        return User.builder()
+                .studentId(this.id)
+                .userName(this.name)
                 .major(this.major)
-                .createdAt(new Timestamp(System.currentTimeMillis()))
                 .build();
     }
 }

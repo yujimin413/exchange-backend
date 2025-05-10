@@ -1,7 +1,5 @@
 package ShinHoDeung.demo.common;
 
-import org.springframework.http.ResponseEntity;
-
 import lombok.Data;
 
 @Data

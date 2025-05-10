@@ -1,6 +1,5 @@
 package ShinHoDeung.demo.service;
 
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,10 +7,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import ShinHoDeung.demo.domain.RefreshToken;
-import ShinHoDeung.demo.domain.Student;
+import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.provider.TokenProvider;
 import ShinHoDeung.demo.repository.RefreshTokenRepository;
-import ShinHoDeung.demo.repository.StudentRepository;
+import ShinHoDeung.demo.repository.UserRepository;
 import ShinHoDeung.demo.service.dto.StudentLoginParamDto;
 import ShinHoDeung.demo.service.dto.StudentLoginReturnDto;
 import ShinHoDeung.demo.service.dto.StudentValidateParamDto;
@@ -26,23 +25,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StudentService {
     
-    private final StudentRepository studentRepository;
+    private final UserRepository studentRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
 
     @NotNull
     public StudentLoginReturnDto studentLogin(@NotNull StudentLoginParamDto studentLoginParamDto){
-        Optional<Student> studentOptional = studentRepository.findById(studentLoginParamDto.getId());
-        Student student;
+        Optional<User> studentOptional = studentRepository.findByStudentId(studentLoginParamDto.getId());
+        User student;
 
         if(studentOptional.isEmpty()){
             student = studentLoginParamDto.toStudent();
         }
         else{
             student = studentOptional.get();
+            student.setStudentId(studentLoginParamDto.getId());
             student.setMajor(studentLoginParamDto.getMajor());
-            student.setName(studentLoginParamDto.getName());
-            student.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            student.setUserName(studentLoginParamDto.getName());
         }
         studentRepository.save(student);
 
@@ -52,8 +51,8 @@ public class StudentService {
         RefreshToken refreshTokenDB = RefreshToken.builder()
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
-                .studentId(student.getId())
-                .name(student.getName())
+                .studentId(student.getStudentId())
+                .name(student.getUserName())
                 .major(student.getMajor())
                 .build();
         refreshTokenRepository.save(refreshTokenDB);
@@ -61,8 +60,8 @@ public class StudentService {
         return StudentLoginReturnDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .studentId(student.getId())
-                .name(student.getName())
+                .studentId(student.getStudentId())
+                .name(student.getUserName())
                 .major(student.getMajor())
                 .build();
     }
@@ -88,17 +87,17 @@ public class StudentService {
                 throw new Exception("Access token and refresh token does not match.");
             }
 
-            Optional<Student> studentOptional = studentRepository.findById(refreshToken.getStudentId());
+            Optional<User> studentOptional = studentRepository.findById(refreshToken.getStudentId());
             if(studentOptional.isEmpty()){
                 throw new Exception("Student does not exist.");
             }
 
-            Student student = studentOptional.get();
+            User student = studentOptional.get();
 
             if(!student.getMajor().equals(refreshToken.getMajor())){
                 throw new Exception("Student major has changed.");
             }
-            else if(!student.getName().equals(refreshToken.getName())){
+            else if(!student.getUserName().equals(refreshToken.getName())){
                 throw new Exception("Student name has changed.");
             }
 
@@ -108,8 +107,8 @@ public class StudentService {
             RefreshToken newRefreshTokenDB = RefreshToken.builder()
                     .refreshToken(newRefreshToken)
                     .accessToken(newAccessToken)
-                    .studentId(student.getId())
-                    .name(student.getName())
+                    .studentId(student.getStudentId())
+                    .name(student.getUserName())
                     .major(student.getMajor())
                     .build();
 
@@ -123,14 +122,14 @@ public class StudentService {
                     .build();
         }
 
-        Optional<Student> student = studentRepository.findById(jwtPayloadVO.getStudentId());
+        Optional<User> student = studentRepository.findById(jwtPayloadVO.getStudentId());
         if(student.isEmpty()){
             throw new Exception("Student does not exist.");
         }
         else if(!student.get().getMajor().equals(jwtPayloadVO.getMajor())){
             throw new Exception("Student major has changed.");
         }
-        else if(!student.get().getName().equals(jwtPayloadVO.getName())){
+        else if(!student.get().getUserName().equals(jwtPayloadVO.getName())){
             throw new Exception("Student name has changed.");
         }
 
