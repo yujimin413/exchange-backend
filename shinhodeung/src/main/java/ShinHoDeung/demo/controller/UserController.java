@@ -10,23 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
+import ShinHoDeung.demo.controller.dto.UserDetailRequestDto;
 import ShinHoDeung.demo.controller.dto.UserLoginRequestDto;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.exception.APIRequestFailedException;
 import ShinHoDeung.demo.exception.AuthFailedException;
 import ShinHoDeung.demo.exception.HTMLParseFailedException;
 import ShinHoDeung.demo.service.AuthService;
-import ShinHoDeung.demo.service.UesrService;
+import ShinHoDeung.demo.service.UserService;
 import ShinHoDeung.demo.service.dto.UserLoginReturnDto;
 import ShinHoDeung.demo.service.dto.UsaintAuthReturnDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UesrService userService;
+    private final UserService userService;
     private final AuthService authService;
     private final StatusCode statusCode;
     
@@ -55,5 +56,16 @@ public class UserController {
         User user = (User) authentication.getPrincipal();
 
         return new CommonResponse(statusCode.SSU2020, user.toUserProfileResponseDto(), statusCode.SSU2020_MSG);
+    }
+
+    @NotNull
+    @PostMapping("/add-detail")
+    public CommonResponse addDetail(@RequestBody UserDetailRequestDto userDetailRequestDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        
+        userService.addUserDetail(userDetailRequestDto.toUserDetailParamDto(user));
+
+        return new CommonResponse(statusCode.SSU2030, "success", statusCode.SSU2030_MSG);
     }
 }

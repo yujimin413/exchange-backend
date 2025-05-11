@@ -6,15 +6,20 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import ShinHoDeung.demo.domain.InterestedCountry;
+import ShinHoDeung.demo.domain.LanguageTest;
 import ShinHoDeung.demo.domain.RefreshToken;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.provider.TokenProvider;
+import ShinHoDeung.demo.repository.InterestedCountryRepository;
+import ShinHoDeung.demo.repository.LanguageTestRepository;
 import ShinHoDeung.demo.repository.RefreshTokenRepository;
 import ShinHoDeung.demo.repository.UserRepository;
 import ShinHoDeung.demo.service.dto.UserLoginParamDto;
 import ShinHoDeung.demo.service.dto.UserLoginReturnDto;
 import ShinHoDeung.demo.service.dto.UserValidateParamDto;
 import ShinHoDeung.demo.service.dto.UserValidateReturnDto;
+import ShinHoDeung.demo.service.dto.UserDetailParamDto;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UesrService {
+public class UserService {
     
     private final UserRepository userRepository;
+    private final LanguageTestRepository languageTestRepository;
+    private final InterestedCountryRepository interestedCountryRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
 
@@ -67,6 +74,35 @@ public class UesrService {
     }
 
     @NotNull
+    public void addUserDetail(@NotNull UserDetailParamDto userDetailParamDto){
+        User user = userDetailParamDto.getUser();
+        
+        for(String country : userDetailParamDto.getInterestedCountries()){
+            InterestedCountry interestedCountry = InterestedCountry.builder()
+            .user(user)
+            .countryName(country)
+            .build();
+            interestedCountryRepository.save(interestedCountry);
+        }
+        
+        if(!userDetailParamDto.getSkip()){
+            user.setCreditAverage(userDetailParamDto.getCreditAverage());
+            user.setPlannedGrade(userDetailParamDto.getPlannedGrade());
+            user.setPlannedSemester(userDetailParamDto.getPlannedSemester());
+            userRepository.save(user);
+            userDetailParamDto.getLanguageTests().forEach((key, value)->{
+                LanguageTest languageTest = LanguageTest.builder()
+                .user(user)
+                .testName(key)
+                .testScore(value)
+                .build();
+                languageTestRepository.save(languageTest);    
+            });
+        }
+        return;
+    }
+
+    @NotNull
     public UserValidateReturnDto validateUser(@NotNull UserValidateParamDto userValidateParamDto) throws Exception {
         JWTPayloadVo jwtPayloadVO;
         try {
@@ -87,7 +123,7 @@ public class UesrService {
                 throw new Exception("Access token and refresh token does not match.");
             }
 
-            Optional<User> userOptional = userRepository.findById(refreshToken.getStudentId());
+            Optional<User> userOptional = userRepository.findByStudentId(refreshToken.getStudentId());
             if(userOptional.isEmpty()){
                 throw new Exception("Student does not exist.");
             }
@@ -122,7 +158,7 @@ public class UesrService {
                     .build();
         }
 
-        Optional<User> user = userRepository.findById(jwtPayloadVO.getStudentId());
+        Optional<User> user = userRepository.findByStudentId(jwtPayloadVO.getStudentId());
         if(user.isEmpty()){
             throw new Exception("Student does not exist.");
         }

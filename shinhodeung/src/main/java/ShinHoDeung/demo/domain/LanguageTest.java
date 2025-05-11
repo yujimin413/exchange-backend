@@ -1,15 +1,17 @@
 package ShinHoDeung.demo.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "language_test")
-@Getter
-@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class LanguageTest {
 
     @Id
