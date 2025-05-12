@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((requests) -> requests
                         // .requestMatchers("/student/login", "/error", "/device/checkVersion", "/sso/validateToken").permitAll()
-                        .requestMatchers("/student/login").permitAll()
+                        .requestMatchers("/user/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
