@@ -1,0 +1,112 @@
+package ShinHoDeung.demo.provider;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Date;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Component;
+
+import ShinHoDeung.demo.vo.JWTPayloadVo;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.micrometer.common.lang.Nullable;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class TokenProvider {
+    /**
+     * JWT secret key from environment variable
+     */
+    @Value("${spring.jwt.secret}")
+    private String JWT_SECRET_KEY;
+
+    /**
+     * Expire time for access token
+     */
+    private final Long ACCESS_TOKEN_EXP = 1000L * 60 * 60 * 2;
+
+    @NotNull
+    public String generateAccessToken(@NotNull JWTPayloadVo jwtPayloadVO) {
+        Claims claims = Jwts.claims();
+        claims.put("studentId", jwtPayloadVO.getStudentId());
+        claims.put("name", jwtPayloadVO.getName());
+        claims.put("major", jwtPayloadVO.getMajor());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration((new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXP)))
+                .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
+                .compact();
+    }
+
+    @Nullable
+    public String generateRandomHashToken(Integer length) {
+        try {
+            final String chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+[]()|`~";
+
+            final SecureRandom secureRandom = SecureRandom.getInstanceStrong();
+            String randomString = secureRandom
+                    .ints(50, 0, chars.length())
+                    .mapToObj(chars::charAt)
+                    .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                    .toString();
+            randomString += System.currentTimeMillis();
+
+            String token;
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            digest.reset();
+            digest.update(randomString.getBytes(StandardCharsets.UTF_8));
+            token = String.format("%0128x", new BigInteger(1, digest.digest()));
+
+            token = token.substring(0, length);
+
+            return token;
+        }
+        catch(Exception e){
+            log.error("Error generating random hash token.", e);
+            return null;
+        }
+    }
+
+    @NotNull
+    public JWTPayloadVo validateAccessToken(@NotNull String token) throws BadCredentialsException, ExpiredJwtException{
+        Claims claims;
+        Integer studentId;
+        String name;
+        String major;
+
+        try {
+            claims = Jwts.parser().setSigningKey(JWT_SECRET_KEY).parseClaimsJws(token).getBody();
+            studentId = (Integer) claims.get("studentId");
+            name = (String) claims.get("name");
+            major = (String) claims.get("major");
+        } catch (SignatureException e) {
+            throw new BadCredentialsException("Invalid JWT_SECRET_KEY.", e);
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BadCredentialsException("Invalid access token.", e);
+        }
+
+        return JWTPayloadVo.builder()
+                .studentId(studentId)
+                .name(name)
+                .major(major)
+                .build();
+
+    }
+
+
+}

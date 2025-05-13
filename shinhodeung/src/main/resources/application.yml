@@ -16,6 +16,9 @@ spring:
   test:
     database:
       replace: none  # 실제 DB를 사용하려면 이 옵션을 사용
-
-server:
-  port: 8080
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jwt:
+    secret: hellohello
