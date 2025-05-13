@@ -32,7 +32,7 @@ public class MapController {
     
     @GetMapping("/university/like")
     public List<University> getUniversityLike(@RequestParam Integer studentId){
-        User user = userRepository.findByStudentId(studentId).get(0);
+        User user = userRepository.findByStudentId(studentId).get();
         return interestedUniversityService.getInterestedUniversity(user);
     }
 }
