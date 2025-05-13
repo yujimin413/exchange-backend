@@ -59,10 +59,38 @@ public class StatusCode {
     // Profile (03)
 
     /**
-     * SSU2020
+     * SSU2030
      */
     public final String SSU2030 = "2030";
     public final String SSU2030_MSG = "Add detail success";
+
+    //
+    // ==================================================================
+    // ==================================================================
+    // UniversityAll (04)
+
+    /**
+     * SSU2040
+     */
+    public final String SSU2040 = "2040";
+    public final String SSU2040_MSG = "Get University All success";
+
+    //
+    // ==================================================================
+    // ==================================================================
+    // UniversityLike (05)
+
+    /**
+     * SSU2050
+     */
+    public final String SSU2050 = "2050";
+    public final String SSU2050_MSG = "Update Like success";
+
+    /**
+     * SSU4050
+     */
+    public final String SSU4050 = "4050";
+    public final String SSU4050_MSG = "Not existing University Id";
 
     //
     // ==================================================================

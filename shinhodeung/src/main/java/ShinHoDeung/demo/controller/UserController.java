@@ -66,6 +66,6 @@ public class UserController {
         
         userService.addUserDetail(userDetailRequestDto.toUserDetailParamDto(user));
 
-        return new CommonResponse(statusCode.SSU2030, "success", statusCode.SSU2030_MSG);
+        return new CommonResponse(statusCode.SSU2030, null, statusCode.SSU2030_MSG);
     }
 }
