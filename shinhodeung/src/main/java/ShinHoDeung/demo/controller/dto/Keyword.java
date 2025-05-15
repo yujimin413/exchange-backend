@@ -2,7 +2,6 @@ package ShinHoDeung.demo.controller.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Setter;
 
 @Builder
 @Data
