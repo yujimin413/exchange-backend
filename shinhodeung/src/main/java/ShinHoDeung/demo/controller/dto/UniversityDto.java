@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class UniversityDto {
     private String id;
-    private String korean_name;
-    private String english_name;
+    private String koreanName;
+    private String englishName;
     private List<String> notes;
     private List<String> tags;
     private String image;

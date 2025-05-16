@@ -3,13 +3,16 @@ package ShinHoDeung.demo.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.UniversityLikeRequestDto;
+import ShinHoDeung.demo.exception.NoSuchUniversityException;
 import ShinHoDeung.demo.service.UniversityService;
 import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
+import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,10 +38,22 @@ public class UniversityController {
     public CommonResponse postUniversityLike(@RequestBody UniversityLikeRequestDto universityLikeRequestDto) {
         try{
             universityService.saveInterestedUniversity(universityLikeRequestDto.getUniversityId());
-        }catch(Exception e){
+        }catch(NoSuchUniversityException e){
             return new CommonResponse(statusCode.SSU4050, null, statusCode.SSU4050_MSG);
         }
         return new CommonResponse(statusCode.SSU2050, null, statusCode.SSU2050_MSG);
     }
     
+    @GetMapping("/detail")
+    public CommonResponse getUniversityDetail(@RequestParam String univId){
+        UniversityDetailReturnDto universityDetailReturnDto;
+
+        try{
+            universityDetailReturnDto = universityService.getUnviersityDetail(univId);
+        }catch(NoSuchUniversityException e){
+            return new CommonResponse(statusCode.SSU4060, null, statusCode.SSU4060_MSG);    
+        }
+        
+        return new CommonResponse(statusCode.SSU2060, universityDetailReturnDto.toUniversityDetailResponseDto(), statusCode.SSU2060_MSG);
+    }
 }

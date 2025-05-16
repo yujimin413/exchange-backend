@@ -84,7 +84,7 @@ public class StatusCode {
      * SSU2050
      */
     public final String SSU2050 = "2050";
-    public final String SSU2050_MSG = "Update Like success";
+    public final String SSU2050_MSG = "save Like success";
 
     /**
      * SSU4050
@@ -95,12 +95,29 @@ public class StatusCode {
     //
     // ==================================================================
     // ==================================================================
-    // UniversityLike (06)
+    // UniversityDetail (06)
 
     /**
      * SSU2060
      */
     public final String SSU2060 = "2060";
-    public final String SSU2060_MSG = "search recommendation success";  
+    public final String SSU2060_MSG = "Get UniversityDetail success";
+
+    /**
+     * SSU4060
+     */
+    public final String SSU4060 = "4060";
+    public final String SSU4060_MSG = "Not existing University Id";
+
+    //
+    // ==================================================================
+    // ==================================================================
+    // UniversitySearch (07)
+
+    /**
+     * SSU2070
+     */
+    public final String SSU2070 = "2070";
+    public final String SSU2070_MSG = "search recommendation success";  
     // ==================================================================
 }
