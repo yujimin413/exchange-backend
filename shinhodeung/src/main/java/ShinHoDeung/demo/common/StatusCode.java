@@ -84,7 +84,7 @@ public class StatusCode {
      * SSU2050
      */
     public final String SSU2050 = "2050";
-    public final String SSU2050_MSG = "save Like success";
+    public final String SSU2050_MSG = "update Like success";
 
     /**
      * SSU4050

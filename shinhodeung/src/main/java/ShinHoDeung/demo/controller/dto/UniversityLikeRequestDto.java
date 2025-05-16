@@ -12,7 +12,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UniversityLikeRequestDto {
-    @JsonProperty("universityId")
+    @JsonProperty("university_id")
     @NotNull
     String universityId;
+
+    @JsonProperty("like")
+    @NotNull
+    Boolean like;
 }

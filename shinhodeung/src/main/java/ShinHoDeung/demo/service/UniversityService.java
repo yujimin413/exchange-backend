@@ -85,6 +85,19 @@ public class UniversityService {
         interestedUniversityRepository.save(interestedUniversity);
     }
 
+    public void deleteInterestedUniversity(String universityId) throws NoSuchUniversityException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<University> university = universityRepository.findById(universityId);
+        
+        if(!university.isPresent())
+            throw new NoSuchUniversityException();
+        
+        Optional<InterestedUniversity> interestedUniversity = interestedUniversityRepository.findByUserAndUniversity(user, university.get());
+        if(interestedUniversity.isPresent())
+            interestedUniversityRepository.delete(interestedUniversity.get());
+    }
+
     public UniversityDetailReturnDto getUnviersityDetail(String universityId) throws NoSuchUniversityException{
         Optional<University> result = universityRepository.findById(universityId);
 

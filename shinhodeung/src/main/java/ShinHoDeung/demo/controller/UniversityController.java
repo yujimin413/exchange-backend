@@ -37,7 +37,10 @@ public class UniversityController {
     @PostMapping("/like")
     public CommonResponse postUniversityLike(@RequestBody UniversityLikeRequestDto universityLikeRequestDto) {
         try{
-            universityService.saveInterestedUniversity(universityLikeRequestDto.getUniversityId());
+            if(universityLikeRequestDto.getLike())
+                universityService.saveInterestedUniversity(universityLikeRequestDto.getUniversityId());
+            else
+                universityService.deleteInterestedUniversity(universityLikeRequestDto.getUniversityId());;
         }catch(NoSuchUniversityException e){
             return new CommonResponse(statusCode.SSU4050, null, statusCode.SSU4050_MSG);
         }
@@ -45,11 +48,11 @@ public class UniversityController {
     }
     
     @GetMapping("/detail")
-    public CommonResponse getUniversityDetail(@RequestParam String univId){
+    public CommonResponse getUniversityDetail(@RequestParam String universityId){
         UniversityDetailReturnDto universityDetailReturnDto;
 
         try{
-            universityDetailReturnDto = universityService.getUnviersityDetail(univId);
+            universityDetailReturnDto = universityService.getUnviersityDetail(universityId);
         }catch(NoSuchUniversityException e){
             return new CommonResponse(statusCode.SSU4060, null, statusCode.SSU4060_MSG);    
         }
