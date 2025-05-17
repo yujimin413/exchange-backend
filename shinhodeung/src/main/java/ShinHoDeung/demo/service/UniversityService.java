@@ -21,6 +21,8 @@ import ShinHoDeung.demo.repository.ReportRepository;
 import ShinHoDeung.demo.repository.UniversityRepository;
 import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
+import ShinHoDeung.demo.service.dto.UniversityFilterParamDto;
+import ShinHoDeung.demo.service.dto.UniversityFilterReturnDto;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -177,6 +179,46 @@ public class UniversityService {
                 .reportNames(reportNames)
                 // .aiSummary(aiSummary)
                 .aiSummary(null)
+                .build();
+    }
+
+    public UniversityFilterReturnDto getFilteredUniversity(UniversityFilterParamDto universityFilterParamDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        // filter find university
+        List<University> universities = universityRepository.findAll();
+
+        ArrayList<UniversityDto> dtos = new ArrayList<UniversityDto>();
+        for(University university: universities){
+            // notes 변환
+            ArrayList<String> notes = new ArrayList<String>();
+            String[] lines = university.getNotes().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.replaceFirst("·\\s*", "").trim();
+                if (!cleaned.isEmpty()) {
+                    notes.add(cleaned);
+                }
+            }
+
+            // isFavorite 검사
+            Boolean isFavorite = interestedUniversityRepository.existsByUserAndUniversity(user, university);
+
+            // dto build
+            UniversityDto dto = UniversityDto.builder()
+                                    .id(university.getId())
+                                    .koreanName(university.getKoreanName())
+                                    .englishName(university.getEnglishName())
+                                    .notes(notes)
+                                    .tags(null)
+                                    .image(null)
+                                    .isFavorite(isFavorite)
+                                    .build();
+            dtos.add(dto);
+        }
+
+        return UniversityFilterReturnDto.builder()
+                .universities(null)
                 .build();
     }
 }

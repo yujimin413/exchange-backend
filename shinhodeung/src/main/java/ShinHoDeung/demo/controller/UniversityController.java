@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
+import ShinHoDeung.demo.controller.dto.UniversityFilterRequestDto;
 import ShinHoDeung.demo.controller.dto.UniversityLikeRequestDto;
 import ShinHoDeung.demo.exception.NoSuchUniversityException;
 import ShinHoDeung.demo.service.UniversityService;
@@ -58,5 +59,11 @@ public class UniversityController {
         }
         
         return new CommonResponse(statusCode.SSU2060, universityDetailReturnDto.toUniversityDetailResponseDto(), statusCode.SSU2060_MSG);
+    }
+
+    @PostMapping("/filtered")
+    public CommonResponse postUniversityFiltered(@RequestBody UniversityFilterRequestDto universityFilterRequestDto){
+        
+        return new CommonResponse(null, null, null);
     }
 }
