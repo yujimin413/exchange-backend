@@ -1,7 +1,10 @@
 package ShinHoDeung.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import ShinHoDeung.demo.controller.dto.NameScore;
+import ShinHoDeung.demo.service.dto.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -15,11 +18,6 @@ import ShinHoDeung.demo.repository.InterestedCountryRepository;
 import ShinHoDeung.demo.repository.LanguageTestRepository;
 import ShinHoDeung.demo.repository.RefreshTokenRepository;
 import ShinHoDeung.demo.repository.UserRepository;
-import ShinHoDeung.demo.service.dto.UserLoginParamDto;
-import ShinHoDeung.demo.service.dto.UserLoginReturnDto;
-import ShinHoDeung.demo.service.dto.UserValidateParamDto;
-import ShinHoDeung.demo.service.dto.UserValidateReturnDto;
-import ShinHoDeung.demo.service.dto.UserDetailParamDto;
 import ShinHoDeung.demo.vo.JWTPayloadVo;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -175,4 +173,36 @@ public class UserService {
                 .refreshToken(Optional.empty())
                 .build();
     }
+
+    @NotNull
+    public MypageReturnDto getMypageInfo(User user) {
+        // 사용자 언어 시험 정보 조회
+        List<LanguageTest> tests = languageTestRepository.findByUser(user);
+
+        // DTO 변환
+        List<NameScore> languageScores = tests.stream().map(test -> {
+            NameScore ns = new NameScore();
+            ns.setTestName(test.getTestName());
+            ns.setTestScore(test.getTestScore());
+            return ns;
+        }).toList();
+
+        // User 엔티티에 아직 없는 값은 null로 처리
+        Boolean isCurrentlyEnrolled = null; // TODO: 추후 필드 확장 시 반영
+        String currentSemester = null;      // TODO: 추후 필드 확장 시 반영
+
+        // 마이페이지 DTO 반환
+        return MypageReturnDto.builder()
+                .profileUrl(user.getProfileUrl())
+                .studentId(user.getStudentId())
+                .name(user.getUserName())
+                .isCurrentlyEnrolled(isCurrentlyEnrolled)
+                .currentSemester(currentSemester)
+                .creditAverage(user.getCreditAverage())
+                .plannedGrade(user.getPlannedGrade())
+                .plannedSemester(user.getPlannedSemester())
+                .languageScores(languageScores)
+                .build();
+    }
+
 }
