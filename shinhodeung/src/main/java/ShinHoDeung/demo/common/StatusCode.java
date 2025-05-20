@@ -112,12 +112,22 @@ public class StatusCode {
     //
     // ==================================================================
     // ==================================================================
-    // UniversitySearch (07)
+    // UniversityFilter (07)
 
     /**
      * SSU2070
      */
     public final String SSU2070 = "2070";
-    public final String SSU2070_MSG = "search recommendation success";  
+    public final String SSU2070_MSG = "Get UniversityFilter success";
+
+    // ==================================================================
+    // ==================================================================
+    // UniversitySearch (08)
+
+    /**
+     * SSU2080
+     */
+    public final String SSU2080 = "2080";
+    public final String SSU2080_MSG = "search recommendation success";  
     // ==================================================================
 }

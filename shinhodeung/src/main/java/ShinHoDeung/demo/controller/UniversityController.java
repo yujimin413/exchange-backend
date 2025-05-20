@@ -14,6 +14,7 @@ import ShinHoDeung.demo.exception.NoSuchUniversityException;
 import ShinHoDeung.demo.service.UniversityService;
 import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
+import ShinHoDeung.demo.service.dto.UniversityFilterReturnDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,7 +64,8 @@ public class UniversityController {
 
     @PostMapping("/filtered")
     public CommonResponse postUniversityFiltered(@RequestBody UniversityFilterRequestDto universityFilterRequestDto){
-        
-        return new CommonResponse(null, null, null);
+        UniversityFilterReturnDto universityFilterReturnDto = universityService.getFilteredUniversity(universityFilterRequestDto.toUniversityFilterParamDto());
+        // return new CommonResponse(null, universityFilterReturnDto.toUniversityFilterResponseDto(), null);
+        return new CommonResponse(null, universityFilterRequestDto, null);
     }
 }

@@ -23,6 +23,7 @@ import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityFilterParamDto;
 import ShinHoDeung.demo.service.dto.UniversityFilterReturnDto;
+import ShinHoDeung.demo.service.dto.UniversitySpecification;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -187,7 +188,7 @@ public class UniversityService {
         User user = (User) authentication.getPrincipal();
 
         // filter find university
-        List<University> universities = universityRepository.findAll();
+        List<University> universities = universityRepository.findAll(UniversitySpecification.filterBy(universityFilterParamDto));
 
         ArrayList<UniversityDto> dtos = new ArrayList<UniversityDto>();
         for(University university: universities){

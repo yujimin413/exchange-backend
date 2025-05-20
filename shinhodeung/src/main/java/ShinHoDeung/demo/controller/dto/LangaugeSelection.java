@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LangaugeSelection {
-    private String langaugeRegion;
+    private String languageRegion;
     private List<String> test;
 }
