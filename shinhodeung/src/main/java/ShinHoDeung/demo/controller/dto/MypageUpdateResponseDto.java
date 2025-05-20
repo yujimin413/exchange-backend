@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class MypageUpdateResponseDto {
 
-    private String profileUrl;
+    private Float creditAverage;
     private Integer plannedGrade;
     private Integer plannedSemester;
 

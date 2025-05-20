@@ -216,7 +216,7 @@ public class UserService {
         }
 
         // User 엔티티 필드 덮어쓰기
-        user.setProfileUrl(dto.getProfileUrl());
+        user.setCreditAverage(dto.getCreditAverage());
         user.setPlannedGrade(dto.getPlannedGrade());
         user.setPlannedSemester(dto.getPlannedSemester());
         userRepository.save(user);
@@ -240,7 +240,7 @@ public class UserService {
 
         // 마이페이지 DTO 반환
         return MypageUpdateReturnDto.builder()
-                .profileUrl(user.getProfileUrl())
+                .creditAverage(user.getCreditAverage())
                 .plannedGrade(user.getPlannedGrade())
                 .plannedSemester(user.getPlannedSemester())
                 .languageScores(languageScores)
