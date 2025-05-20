@@ -187,17 +187,13 @@ public class UserService {
             return ns;
         }).toList();
 
-        // User 엔티티에 아직 없는 값은 null로 처리
-        Boolean isCurrentlyEnrolled = null; // TODO: 추후 필드 확장 시 반영
-        String currentSemester = null;      // TODO: 추후 필드 확장 시 반영
-
         // 마이페이지 DTO 반환
         return MypageReturnDto.builder()
                 .profileUrl(user.getProfileUrl())
                 .studentId(user.getStudentId())
                 .name(user.getUserName())
-                .isCurrentlyEnrolled(isCurrentlyEnrolled)
-                .currentSemester(currentSemester)
+                .isCurrentlyEnrolled(user.getIsCurrentlyEnrolled())
+                .currentSemester(user.getCurrentSemester())
                 .creditAverage(user.getCreditAverage())
                 .plannedGrade(user.getPlannedGrade())
                 .plannedSemester(user.getPlannedSemester())
