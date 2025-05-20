@@ -52,12 +52,24 @@ public class University {
     @Column(nullable = false, length = 2048)
     private String website;
 
-    @Column(length = 2048)
-    private String image;
-
     @Column(name = "language_region", nullable = false, length = 255)
     private String languageRegion;
 
     @Column(name = "available_majors", nullable = false, length = 255)
     private String availableMajors;
+
+    @Column(name = "summary_location", length = 2048)
+    private String summaryLocation;
+
+    @Column(name = "summary_weather", length = 2048)
+    private String summaryWeather;
+
+    @Column(name = "summary_academic", length = 2048)
+    private String summaryAcademic;
+
+    @Column(name = "summary_safety", length = 2048)
+    private String summarySafety;
+
+    @Column(length = 1024)
+    private String hashtag;
 }
