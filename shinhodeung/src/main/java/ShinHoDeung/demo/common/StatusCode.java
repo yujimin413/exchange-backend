@@ -26,44 +26,4 @@ public class StatusCode {
     public final String SSU5000_MSG = "Internal Server Error";
     
     // ==================================================================
-    
-    // ==================================================================
-    // Login (01)
-
-    /**
-     * SSU2010
-     */
-    public final String SSU2010 = "2010";
-    public final String SSU2010_MSG = "Login success";
-
-    /**
-     * SSU4010
-     */
-    public final String SSU4010 = "4010";
-    public final String SSU4010_MSG = "Failed to authenticate with uSaint";
-
-    // ==================================================================
-
-    // ==================================================================
-    // Profile (02)
-
-    /**
-     * SSU2020
-     */
-    public final String SSU2020 = "2020";
-    public final String SSU2020_MSG = "Get profile success";
-
-    //
-    // ==================================================================
-    // ==================================================================
-    // Profile (03)
-
-    /**
-     * SSU2020
-     */
-    public final String SSU2030 = "2030";
-    public final String SSU2030_MSG = "Add detail success";
-
-    //
-    // ==================================================================
 }

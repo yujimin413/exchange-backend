@@ -39,14 +39,14 @@ public class UserController {
         try{
             usaintAuthReturnDto = authService.uSaintAuth(userLoginRequestDto.toUsaintAuthParamDto());
         } catch (AuthFailedException e) {
-            return new CommonResponse(statusCode.SSU4010, null, statusCode.SSU4010_MSG);
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
         } catch (APIRequestFailedException | HTMLParseFailedException e) {
             return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
         }
 
         UserLoginReturnDto userLoginReturnDto = userService.userLogin(usaintAuthReturnDto.toUserLoginParamDto());
         
-        return new CommonResponse(statusCode.SSU2010, userLoginReturnDto.toUserLoginResponseDto(), statusCode.SSU2010_MSG);
+        return new CommonResponse(statusCode.SSU2000, userLoginReturnDto.toUserLoginResponseDto(), statusCode.SSU2000_MSG);
     }
 
     @NotNull
@@ -55,7 +55,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        return new CommonResponse(statusCode.SSU2020, user.toUserProfileResponseDto(), statusCode.SSU2020_MSG);
+        return new CommonResponse(statusCode.SSU2000, user.toUserProfileResponseDto(), statusCode.SSU2000_MSG);
     }
 
     @NotNull
@@ -66,6 +66,6 @@ public class UserController {
         
         userService.addUserDetail(userDetailRequestDto.toUserDetailParamDto(user));
 
-        return new CommonResponse(statusCode.SSU2030, "success", statusCode.SSU2030_MSG);
+        return new CommonResponse(statusCode.SSU2000, "success", statusCode.SSU2000_MSG);
     }
 }
