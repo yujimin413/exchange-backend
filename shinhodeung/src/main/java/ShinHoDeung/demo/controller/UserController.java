@@ -1,7 +1,8 @@
 package ShinHoDeung.demo.controller;
 
-import ShinHoDeung.demo.controller.dto.MypageResponseDto;
+import ShinHoDeung.demo.controller.dto.*;
 import ShinHoDeung.demo.service.dto.MypageReturnDto;
+import ShinHoDeung.demo.service.dto.MypageUpdateReturnDto;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
-import ShinHoDeung.demo.controller.dto.UserDetailRequestDto;
-import ShinHoDeung.demo.controller.dto.UserLoginRequestDto;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.exception.APIRequestFailedException;
 import ShinHoDeung.demo.exception.AuthFailedException;
@@ -73,15 +72,22 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-
-        System.out.println("authentication = " + authentication);
-        System.out.println("principal = " + authentication.getPrincipal());
-
-
         MypageReturnDto mypageReturnDto = userService.getMypageInfo(user);
 
         return new CommonResponse(statusCode.SSU2000, mypageReturnDto.toMypageResponseDto(), statusCode.SSU2000_MSG);
     }
+
+    @NotNull
+    @PostMapping("/mypage")
+    public CommonResponse updateMypage(@RequestBody @NotNull MypageUpdateRequestDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        MypageUpdateReturnDto mypageUpdateReturnDto = userService.updateMypageInfo(user, dto);
+
+        return new CommonResponse(statusCode.SSU2000, mypageUpdateReturnDto.toMypageUpdateResponseDto(), statusCode.SSU2000_MSG);
+    }
+
 
 
 }

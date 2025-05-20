@@ -1,10 +1,13 @@
 package ShinHoDeung.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import ShinHoDeung.demo.controller.dto.MypageUpdateRequestDto;
 import ShinHoDeung.demo.controller.dto.NameScore;
 import ShinHoDeung.demo.service.dto.*;
+import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -202,5 +205,47 @@ public class UserService {
                 .languageScores(languageScores)
                 .build();
     }
+
+
+    @Transactional
+    public MypageUpdateReturnDto updateMypageInfo(User user, MypageUpdateRequestDto dto) {
+        // 기존 어학시험 데이터 삭제
+        List<LanguageTest> existing = languageTestRepository.findByUser(user);
+        if (!existing.isEmpty()) {
+            languageTestRepository.deleteAll(existing);
+        }
+
+        // User 엔티티 필드 덮어쓰기
+        user.setProfileUrl(dto.getProfileUrl());
+        user.setPlannedGrade(dto.getPlannedGrade());
+        user.setPlannedSemester(dto.getPlannedSemester());
+        userRepository.save(user);
+
+        // 새로운 어학시험 정보 저장
+        List<NameScore> languageScores = new ArrayList<>();
+        dto.getLanguageScores().forEach(ns -> {
+            LanguageTest lt = LanguageTest.builder()
+                    .user(user)
+                    .testName(ns.getTestName())
+                    .testScore(ns.getTestScore())
+                    .build();
+            languageTestRepository.save(lt);
+
+            // NameScore 객체로 변환
+            NameScore nameScore = new NameScore();
+            nameScore.setTestName(ns.getTestName());
+            nameScore.setTestScore(ns.getTestScore());
+            languageScores.add(nameScore);
+        });
+
+        // 마이페이지 DTO 반환
+        return MypageUpdateReturnDto.builder()
+                .profileUrl(user.getProfileUrl())
+                .plannedGrade(user.getPlannedGrade())
+                .plannedSemester(user.getPlannedSemester())
+                .languageScores(languageScores)
+                .build();
+    }
+
 
 }
