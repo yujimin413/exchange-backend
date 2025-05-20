@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class MypageUpdateReturnDto {
 
-    private String profileUrl;
+    private Float creditAverage;
     private Integer plannedGrade;
     private Integer plannedSemester;
     private List<NameScore> languageScores;
@@ -20,7 +20,7 @@ public class MypageUpdateReturnDto {
     @NotNull
     public MypageUpdateResponseDto toMypageUpdateResponseDto(){
         return MypageUpdateResponseDto.builder()
-                .profileUrl(this.profileUrl)
+                .creditAverage(this.creditAverage)
                 .plannedGrade(this.plannedGrade)
                 .plannedSemester(this.plannedSemester)
                 .languageScores(this.languageScores)

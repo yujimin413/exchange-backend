@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MypageUpdateRequestDto {
 
-    private String profileUrl;
+    private Float creditAverage;
     private Integer plannedGrade;
     private Integer plannedSemester;
 
