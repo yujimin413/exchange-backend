@@ -39,6 +39,10 @@ public class User {
     private Integer plannedGrade;
     @Column(name = "planned_semester")
     private Integer plannedSemester;
+    @Column(name = "is_currently_enrolled")
+    private Boolean isCurrentlyEnrolled;
+    @Column(name = "current_semester")
+    private String currentSemester;
 
     @NotNull
     public JWTPayloadVo toJWTPayloadVO(){

@@ -1,12 +1,11 @@
 package ShinHoDeung.demo.controller;
 
+import ShinHoDeung.demo.controller.dto.MypageResponseDto;
+import ShinHoDeung.demo.service.dto.MypageReturnDto;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
@@ -68,4 +67,21 @@ public class UserController {
 
         return new CommonResponse(statusCode.SSU2000, "success", statusCode.SSU2000_MSG);
     }
+
+    @GetMapping("/mypage")
+    public CommonResponse mypage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+
+        System.out.println("authentication = " + authentication);
+        System.out.println("principal = " + authentication.getPrincipal());
+
+
+        MypageReturnDto mypageReturnDto = userService.getMypageInfo(user);
+
+        return new CommonResponse(statusCode.SSU2000, mypageReturnDto.toMypageResponseDto(), statusCode.SSU2000_MSG);
+    }
+
+
 }
