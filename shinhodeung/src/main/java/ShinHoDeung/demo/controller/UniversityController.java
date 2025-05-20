@@ -33,7 +33,7 @@ public class UniversityController {
     public CommonResponse getUniversityAll(){
         UniversityAllReturnDto universityAllReturnDto = universityService.getAllUniversity();
         
-        return new CommonResponse(statusCode.SSU2040, universityAllReturnDto.toUniversityAllResponseDto(), statusCode.SSU2040_MSG);
+        return new CommonResponse(statusCode.SSU2000, universityAllReturnDto.toUniversityAllResponseDto(), statusCode.SSU2000_MSG);
     }
 
     @PostMapping("/like")
@@ -44,9 +44,9 @@ public class UniversityController {
             else
                 universityService.deleteInterestedUniversity(universityLikeRequestDto.getUniversityId());;
         }catch(NoSuchUniversityException e){
-            return new CommonResponse(statusCode.SSU4050, null, statusCode.SSU4050_MSG);
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
         }
-        return new CommonResponse(statusCode.SSU2050, null, statusCode.SSU2050_MSG);
+        return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
     }
     
     @GetMapping("/detail")
@@ -56,10 +56,10 @@ public class UniversityController {
         try{
             universityDetailReturnDto = universityService.getUnviersityDetail(universityId);
         }catch(NoSuchUniversityException e){
-            return new CommonResponse(statusCode.SSU4060, null, statusCode.SSU4060_MSG);    
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);    
         }
         
-        return new CommonResponse(statusCode.SSU2060, universityDetailReturnDto.toUniversityDetailResponseDto(), statusCode.SSU2060_MSG);
+        return new CommonResponse(statusCode.SSU2000, universityDetailReturnDto.toUniversityDetailResponseDto(), statusCode.SSU2000_MSG);
     }
 
     @PostMapping("/filtered")

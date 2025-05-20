@@ -161,7 +161,7 @@ public class UniversityService {
                 .koreanName(university.getKoreanName())
                 .englishName(university.getEnglishName())
                 .isFavorite(isFavorite)
-                .image(university.getImage())
+                // .image(university.getImage())
                 .website(university.getWebsite())
                 // .tags(tags)
                 .tags(null)

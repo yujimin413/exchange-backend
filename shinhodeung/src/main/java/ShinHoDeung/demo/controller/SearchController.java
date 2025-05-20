@@ -22,7 +22,7 @@ public class SearchController {
     public CommonResponse recommendSearchKeyword(@RequestParam String search) {
         System.out.println(search);
         SearchReturnParamDto searchReturnParamDto = searchService.getKeywords(search);
-        return new CommonResponse(statusCode.SSU2070, searchReturnParamDto.toSearchResponseDto(),statusCode.SSU2070_MSG);
+        return new CommonResponse(statusCode.SSU2000, searchReturnParamDto.toSearchResponseDto(),statusCode.SSU2000_MSG);
     }
     
 }
