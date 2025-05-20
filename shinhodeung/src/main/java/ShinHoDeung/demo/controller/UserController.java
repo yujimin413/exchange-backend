@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
@@ -40,7 +39,7 @@ public class UserController {
         try{
             usaintAuthReturnDto = authService.uSaintAuth(userLoginRequestDto.toUsaintAuthParamDto());
         } catch (AuthFailedException e) {
-            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
+            return new CommonResponse(statusCode.SSU4001, null, statusCode.SSU4001_MSG);
         } catch (APIRequestFailedException | HTMLParseFailedException e) {
             return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
         }

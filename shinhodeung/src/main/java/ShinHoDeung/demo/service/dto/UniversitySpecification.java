@@ -30,26 +30,38 @@ public class UniversitySpecification {
                 predicates.add(root.get("region").in(request.getRegions()));
             }
 
+            if (request.getCountries() != null && !request.getCountries().isEmpty()) {
+                predicates.add(root.get("country").in(request.getCountries()));
+            }
+
             if (request.getProgramTypes() != null && !request.getProgramTypes().isEmpty()) {
                 predicates.add(root.get("programType").in(request.getProgramTypes()));
             }
 
             if (request.getAvailableMajors() != null && !request.getAvailableMajors().isEmpty()) {
-                predicates.add(root.get("availableMajors").in(request.getAvailableMajors()));
+                List<Predicate> majorPredicates = new ArrayList<>();
+                for (String major : request.getAvailableMajors()) {
+                    // '공학/기술' 이 포함된 문자열 찾기
+                    majorPredicates.add(
+                        cb.like(root.get("availableMajors"), "%" + major + "%")
+                    );
+                }
+                // 여러 major 중 하나라도 포함되면 통과
+                predicates.add(cb.or(majorPredicates.toArray(new Predicate[0])));
             }
 
             if (request.getLanguageSelections() != null && !request.getLanguageSelections().isEmpty()) {
                 List<Predicate> langPredicates = new ArrayList<>();
                 for (LangaugeSelection lang : request.getLanguageSelections()) {
                     System.out.println(lang.getLanguageRegion());
-                    System.out.println(map);
-                    // if(map.containsKey(lang.getLanguageRegion())){
-                    //     Predicate regionMatch = cb.equal(root.get("languageRegion"), lang.getLanguageRegion());
-                    //     List<String> list = map.get(lang.getLanguageRegion());
-                    //     List<String> sliced = list.subList(list.indexOf(lang.getTest()), list.size());
-                    //     Predicate testMatch = root.get("languageRequirement").in(sliced);
-                    //     langPredicates.add(cb.and(regionMatch, testMatch));
-                    // }
+                    System.out.println(lang.getTest());
+                    if(map.containsKey(lang.getLanguageRegion())){
+                        Predicate regionMatch = cb.equal(root.get("languageRegion"), lang.getLanguageRegion());
+                        List<String> list = map.get(lang.getLanguageRegion());
+                        List<String> sliced = list.subList(list.indexOf(lang.getTest()), list.size());
+                        Predicate testMatch = root.get("languageRequirement").in(sliced);
+                        langPredicates.add(cb.and(regionMatch, testMatch));
+                    }
                 }
                 predicates.add(cb.or(langPredicates.toArray(new Predicate[0])));
             }

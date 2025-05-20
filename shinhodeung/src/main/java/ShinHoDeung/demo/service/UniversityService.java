@@ -1,6 +1,7 @@
 package ShinHoDeung.demo.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,11 +46,13 @@ public class UniversityService {
         for(University university: universities){
             // notes 변환
             ArrayList<String> notes = new ArrayList<String>();
-            String[] lines = university.getNotes().split("\\r?\\n");
-            for(String line : lines){
-                String cleaned = line.replaceFirst("·\\s*", "").trim();
-                if (!cleaned.isEmpty()) {
-                    notes.add(cleaned);
+            if(university.getNotes()!=null){
+                String[] lines = university.getNotes().split("\\r?\\n");
+                for(String line : lines){
+                    String cleaned = line.replaceFirst("·\\s*", "").trim();
+                    if (!cleaned.isEmpty()) {
+                        notes.add(cleaned);
+                    }
                 }
             }
 
@@ -61,6 +64,8 @@ public class UniversityService {
                                     .id(university.getId())
                                     .koreanName(university.getKoreanName())
                                     .englishName(university.getEnglishName())
+                                    .region(university.getRegion())
+                                    .country(university.getCountry())
                                     .notes(notes)
                                     .tags(null)
                                     .image(null)
@@ -104,9 +109,6 @@ public class UniversityService {
     public UniversityDetailReturnDto getUnviersityDetail(String universityId) throws NoSuchUniversityException{
         Optional<University> result = universityRepository.findById(universityId);
 
-        System.out.println(universityId);
-        System.out.println(result.isPresent());
-        System.out.println(result.get());
         if(!result.isPresent())
             throw new NoSuchUniversityException();
         University university = result.get();
@@ -117,38 +119,47 @@ public class UniversityService {
         Boolean isFavorite = interestedUniversityRepository.existsByUserAndUniversity(user, university);
         // notes
         ArrayList<String> notes = new ArrayList<String>();
-        String[] lines = university.getNotes().split("\\r?\\n");
-        for(String line : lines){
-            String cleaned = line.replaceFirst("·\\s*", "").trim();
-            if (!cleaned.isEmpty()) {
-                notes.add(cleaned);
+        String[] lines;
+        if(university.getNotes()!=null){
+            lines = university.getNotes().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.replaceFirst("·\\s*", "").trim();
+                if (!cleaned.isEmpty()) {
+                    notes.add(cleaned);
+                }
             }
         }
         // specialNotes
         ArrayList<String> specialNotes = new ArrayList<String>();
-        lines = university.getSpecialNotes().split("\\r?\\n");
-        for(String line : lines){
-            String cleaned = line.replaceFirst("·\\s*", "").trim();
-            if (!cleaned.isEmpty()) {
-                specialNotes.add(cleaned);
+        if(university.getSpecialNotes()!=null){
+            lines = university.getSpecialNotes().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.replaceFirst("·\\s*", "").trim();
+                if (!cleaned.isEmpty()) {
+                    specialNotes.add(cleaned);
+                }
             }
         }
         // languageRequirement
         ArrayList<String> languageRequirement = new ArrayList<String>();
-        lines = university.getSpecialNotes().split("\\r?\\n");
-        for(String line : lines){
-            String cleaned = line.trim();
-            if (!cleaned.isEmpty()) {
-                languageRequirement.add(cleaned);
+        if(university.getLanguageRequirement()!=null){
+            lines = university.getLanguageRequirement().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.trim();
+                if (!cleaned.isEmpty()) {
+                    languageRequirement.add(cleaned);
+                }
             }
         }
         // availableCourses
         ArrayList<String> availableCourses = new ArrayList<String>();
-        lines = university.getSpecialNotes().split("\\r?\\n");
-        for(String line : lines){
-            String cleaned = line.replaceFirst("·\\s*", "").trim();
-            if (!cleaned.isEmpty()) {
-                availableCourses.add(cleaned);
+        if(university.getAvailableCourses()!=null){
+            lines = university.getSpecialNotes().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.replaceFirst("·\\s*", "").trim();
+                if (!cleaned.isEmpty()) {
+                    availableCourses.add(cleaned);
+                }
             }
         }
         // reportNum
@@ -156,6 +167,16 @@ public class UniversityService {
         int reportNum = reports.size();
         // reportNames
         List<String> reportNames = reports.stream().map(Report::getFileName).collect(Collectors.toList());
+        // tags
+        List<String> tags = null;
+            if(university.getHashtag()!=null)
+                tags = new ArrayList<>(Arrays.asList(university.getHashtag().split(" ")));
+        // ai summary
+        List<String> aiSummary = new ArrayList<>();
+        aiSummary.add(university.getSummaryLocation());
+        aiSummary.add(university.getSummaryWeather());
+        aiSummary.add(university.getSummaryAcademic());
+        aiSummary.add(university.getSummarySafety());
 
         return UniversityDetailReturnDto.builder()
                 .koreanName(university.getKoreanName())
@@ -163,8 +184,7 @@ public class UniversityService {
                 .isFavorite(isFavorite)
                 // .image(university.getImage())
                 .website(university.getWebsite())
-                // .tags(tags)
-                .tags(null)
+                .tags(tags)
                 .programType(university.getProgramType())
                 .institution(university.getInstitution())
                 .id(university.getId())
@@ -178,8 +198,7 @@ public class UniversityService {
                 .availableCourses(availableCourses)
                 .reportNum(reportNum)
                 .reportNames(reportNames)
-                // .aiSummary(aiSummary)
-                .aiSummary(null)
+                .aiSummary(aiSummary)
                 .build();
     }
 
@@ -193,25 +212,35 @@ public class UniversityService {
         ArrayList<UniversityDto> dtos = new ArrayList<UniversityDto>();
         for(University university: universities){
             // notes 변환
-            ArrayList<String> notes = new ArrayList<String>();
-            String[] lines = university.getNotes().split("\\r?\\n");
-            for(String line : lines){
-                String cleaned = line.replaceFirst("·\\s*", "").trim();
-                if (!cleaned.isEmpty()) {
-                    notes.add(cleaned);
+            ArrayList<String> notes = null;
+            if(university.getNotes()!=null){
+                notes = new ArrayList<String>();
+                String[] lines = university.getNotes().split("\\r?\\n");
+                for(String line : lines){
+                    String cleaned = line.replaceFirst("·\\s*", "").trim();
+                    if (!cleaned.isEmpty()) {
+                        notes.add(cleaned);
+                    }
                 }
             }
 
             // isFavorite 검사
             Boolean isFavorite = interestedUniversityRepository.existsByUserAndUniversity(user, university);
 
+            // tags 분리
+            List<String> tags = null;
+            if(university.getHashtag()!=null)
+                tags = new ArrayList<>(Arrays.asList(university.getHashtag().split(" ")));
+
             // dto build
             UniversityDto dto = UniversityDto.builder()
                                     .id(university.getId())
                                     .koreanName(university.getKoreanName())
                                     .englishName(university.getEnglishName())
+                                    .region(university.getRegion())
+                                    .country(university.getCountry())
                                     .notes(notes)
-                                    .tags(null)
+                                    .tags(tags)
                                     .image(null)
                                     .isFavorite(isFavorite)
                                     .build();
@@ -219,7 +248,7 @@ public class UniversityService {
         }
 
         return UniversityFilterReturnDto.builder()
-                .universities(null)
+                .universities(dtos)
                 .build();
     }
 }

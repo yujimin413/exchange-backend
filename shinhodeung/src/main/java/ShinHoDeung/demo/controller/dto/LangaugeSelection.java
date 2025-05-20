@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class LangaugeSelection {
     private String languageRegion;
-    private List<String> test;
+    private String test;
 }

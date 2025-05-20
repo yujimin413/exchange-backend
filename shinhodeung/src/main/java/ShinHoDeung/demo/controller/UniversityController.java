@@ -65,7 +65,6 @@ public class UniversityController {
     @PostMapping("/filtered")
     public CommonResponse postUniversityFiltered(@RequestBody UniversityFilterRequestDto universityFilterRequestDto){
         UniversityFilterReturnDto universityFilterReturnDto = universityService.getFilteredUniversity(universityFilterRequestDto.toUniversityFilterParamDto());
-        // return new CommonResponse(null, universityFilterReturnDto.toUniversityFilterResponseDto(), null);
-        return new CommonResponse(null, universityFilterRequestDto, null);
+        return new CommonResponse(statusCode.SSU2000, universityFilterReturnDto.toUniversityFilterResponseDto(), statusCode.SSU2000_MSG);
     }
 }

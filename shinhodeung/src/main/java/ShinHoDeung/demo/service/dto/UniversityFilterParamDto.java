@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class UniversityFilterParamDto {
     List<String> regions;
+    List<String> countries;
     List<String> programTypes;
     List<String> availableMajors;
     List<LangaugeSelection> languageSelections;

@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UniversityFilterRequestDto {
     List<String> regions;
+    List<String> countries;
     List<String> programTypes;
     List<String> availableMajors;
     List<LangaugeSelection> languageSelections;
@@ -19,6 +20,7 @@ public class UniversityFilterRequestDto {
     public UniversityFilterParamDto toUniversityFilterParamDto(){
         return UniversityFilterParamDto.builder()
                 .regions(regions)
+                .countries(countries)
                 .programTypes(programTypes)
                 .availableMajors(availableMajors)
                 .languageSelections(languageSelections)
