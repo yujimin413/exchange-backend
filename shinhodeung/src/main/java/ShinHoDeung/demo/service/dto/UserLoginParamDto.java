@@ -13,6 +13,8 @@ public class UserLoginParamDto {
     private Integer id;
     private String name;
     private String major;
+    private boolean isEnrolled;
+    private String semester;
 
     @NotNull
     public JWTPayloadVo toJWTPayloadVO(){
@@ -25,10 +27,13 @@ public class UserLoginParamDto {
 
     @NotNull
     public User toUser(){
+        
         return User.builder()
                 .studentId(this.id)
                 .userName(this.name)
                 .major(this.major)
+                .isCurrentlyEnrolled(this.isEnrolled)
+                .currentSemester(this.semester)
                 .build();
     }
 }

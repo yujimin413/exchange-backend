@@ -20,6 +20,8 @@ public class UsaintAuthReturnDto {
                 .id(this.id)
                 .name(this.name)
                 .major(this.major)
+                .isEnrolled(this.status.contains("재학"))
+                .semester(this.semester)
                 .build();
     }
 }

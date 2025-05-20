@@ -47,6 +47,8 @@ public class UserService {
             user.setStudentId(userLoginParamDto.getId());
             user.setMajor(userLoginParamDto.getMajor());
             user.setUserName(userLoginParamDto.getName());
+            user.setIsCurrentlyEnrolled(userLoginParamDto.isEnrolled());
+            user.setCurrentSemester(userLoginParamDto.getSemester());
         }
         userRepository.save(user);
 
