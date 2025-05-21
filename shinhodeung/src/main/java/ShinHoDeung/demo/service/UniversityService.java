@@ -154,7 +154,7 @@ public class UniversityService {
         // availableCourses
         ArrayList<String> availableCourses = new ArrayList<String>();
         if(university.getAvailableCourses()!=null){
-            lines = university.getSpecialNotes().split("\\r?\\n");
+            lines = university.getAvailableCourses().split("\\r?\\n");
             for(String line : lines){
                 String cleaned = line.replaceFirst("·\\s*", "").trim();
                 if (!cleaned.isEmpty()) {
