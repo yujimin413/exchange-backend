@@ -37,7 +37,7 @@ public class UserController {
         try{
             usaintAuthReturnDto = authService.uSaintAuth(userLoginRequestDto.toUsaintAuthParamDto());
         } catch (AuthFailedException e) {
-            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
+            return new CommonResponse(statusCode.SSU4001, null, statusCode.SSU4001_MSG);
         } catch (APIRequestFailedException | HTMLParseFailedException e) {
             return new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
         }

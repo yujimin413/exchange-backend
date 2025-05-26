@@ -22,3 +22,5 @@ spring:
       port: 6379
   jwt:
     secret: hellohello
+  jackson:
+    property-naming-strategy: SNAKE_CASE

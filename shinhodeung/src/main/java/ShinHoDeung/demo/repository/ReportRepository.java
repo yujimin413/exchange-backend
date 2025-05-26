@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import ShinHoDeung.demo.domain.Report;
 
+import java.util.List;
+
+
 @Repository
-public interface ReportRepository extends JpaRepository<Report, Integer>{
-    
+public interface ReportRepository extends JpaRepository<Report, String>{
+    List<Report> findByUniversity(String university);
 }
