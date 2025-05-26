@@ -203,6 +203,7 @@ public class UserService {
                 .plannedGrade(user.getPlannedGrade())
                 .plannedSemester(user.getPlannedSemester())
                 .languageScores(languageScores)
+                .major(user.getMajor())
                 .build();
     }
 

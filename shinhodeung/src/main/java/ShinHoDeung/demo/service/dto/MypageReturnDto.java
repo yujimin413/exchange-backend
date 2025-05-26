@@ -18,6 +18,7 @@ public class MypageReturnDto {
     private String name;
     private Boolean isCurrentlyEnrolled;
     private String currentSemester;
+    private String major;
 
     // 지원자격
     private Float creditAverage;
@@ -37,6 +38,7 @@ public class MypageReturnDto {
                 .plannedGrade(this.plannedGrade)
                 .plannedSemester(this.plannedSemester)
                 .languageScores(this.languageScores)
+                .major(this.major)
                 .build();
     }
 }

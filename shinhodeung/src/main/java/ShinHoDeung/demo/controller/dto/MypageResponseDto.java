@@ -14,6 +14,7 @@ public class MypageResponseDto {
     private String name;
     private Boolean isCurrentlyEnrolled;  // 재학 여부
     private String currentSemester; // 현재 학기
+    private String major;
 
     // 지원 자격
     private Float creditAverage;
