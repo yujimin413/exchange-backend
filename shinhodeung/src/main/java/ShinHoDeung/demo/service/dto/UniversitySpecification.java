@@ -26,8 +26,8 @@ public class UniversitySpecification {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            if (request.getRegions() != null && !request.getRegions().isEmpty()) {
-                predicates.add(root.get("region").in(request.getRegions()));
+            if (request.getRegion() != null && !request.getRegion().isEmpty()) {
+                predicates.add(cb.equal(root.get("region"), request.getRegion()));
             }
 
             if (request.getCountries() != null && !request.getCountries().isEmpty()) {
