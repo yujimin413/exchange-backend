@@ -52,6 +52,7 @@ public class SearchService {
                 detail = Detail.builder()
                         .region(university.getRegion())
                         .country(university.getCountry())
+                        .university_id(university.getId())
                         .english_name(university.getEnglishName())
                         .tags(null)
                         .build();

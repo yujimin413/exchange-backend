@@ -19,9 +19,13 @@ public class Detail {
     private String english_name;  // university에만 해당
 
     @JsonInclude(JsonInclude.Include.NON_NULL) 
+    private String university_id;  // university에만 해당
+
+    @JsonInclude(JsonInclude.Include.NON_NULL) 
     private String country;  // university에만 해당
 
     @JsonInclude(JsonInclude.Include.NON_NULL)  
     private List<String> tags;  // university에만 해당
 
+    
 }

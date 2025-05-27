@@ -15,6 +15,7 @@ import ShinHoDeung.demo.service.UniversityService;
 import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityFilterReturnDto;
+import ShinHoDeung.demo.service.dto.UniversityOneReturnDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +57,7 @@ public class UniversityController {
         try{
             universityDetailReturnDto = universityService.getUnviersityDetail(universityId);
         }catch(NoSuchUniversityException e){
-            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);    
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
         }
         
         return new CommonResponse(statusCode.SSU2000, universityDetailReturnDto.toUniversityDetailResponseDto(), statusCode.SSU2000_MSG);
@@ -66,5 +67,18 @@ public class UniversityController {
     public CommonResponse postUniversityFiltered(@RequestBody UniversityFilterRequestDto universityFilterRequestDto){
         UniversityFilterReturnDto universityFilterReturnDto = universityService.getFilteredUniversity(universityFilterRequestDto.toUniversityFilterParamDto());
         return new CommonResponse(statusCode.SSU2000, universityFilterReturnDto.toUniversityFilterResponseDto(), statusCode.SSU2000_MSG);
+    }
+
+    @NotNull
+    @GetMapping("/one")
+    public CommonResponse getUniversityOne(@RequestParam String universityId){
+        UniversityOneReturnDto universityOneReturnDto;
+        try{
+            universityOneReturnDto = universityService.getOneUniversity(universityId);
+        }catch(NoSuchUniversityException e){
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
+        }
+
+        return new CommonResponse(statusCode.SSU2000, universityOneReturnDto.toUniversityOneResponseDto(), statusCode.SSU2000_MSG);
     }
 }

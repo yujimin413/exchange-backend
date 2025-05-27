@@ -24,6 +24,7 @@ import ShinHoDeung.demo.service.dto.UniversityAllReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityDetailReturnDto;
 import ShinHoDeung.demo.service.dto.UniversityFilterParamDto;
 import ShinHoDeung.demo.service.dto.UniversityFilterReturnDto;
+import ShinHoDeung.demo.service.dto.UniversityOneReturnDto;
 import ShinHoDeung.demo.service.dto.UniversitySpecification;
 import lombok.RequiredArgsConstructor;
 
@@ -248,6 +249,52 @@ public class UniversityService {
         }
 
         return UniversityFilterReturnDto.builder()
+                .universities(dtos)
+                .build();
+    }
+
+    @NotNull
+    public UniversityOneReturnDto getOneUniversity(String universityId) throws NoSuchUniversityException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<University> result = universityRepository.findById(universityId);
+        List<InterestedUniversity> interestedUniversities = interestedUniversityRepository.findByUser(user);
+        if(!result.isPresent())
+            throw new NoSuchUniversityException();
+        University university = result.get();
+
+        ArrayList<UniversityDto> dtos = new ArrayList<UniversityDto>();
+        
+        // notes 변환
+        ArrayList<String> notes = new ArrayList<String>();
+        if(university.getNotes()!=null){
+            String[] lines = university.getNotes().split("\\r?\\n");
+            for(String line : lines){
+                String cleaned = line.replaceFirst("·\\s*", "").trim();
+                if (!cleaned.isEmpty()) {
+                    notes.add(cleaned);
+                }
+            }
+        }
+
+        // isFavorite 검사
+        Boolean isFavorite = interestedUniversities.stream().anyMatch(u -> university.equals(u.getUniversity()));
+
+        // dto build
+        UniversityDto dto = UniversityDto.builder()
+                                .id(university.getId())
+                                .koreanName(university.getKoreanName())
+                                .englishName(university.getEnglishName())
+                                .region(university.getRegion())
+                                .country(university.getCountry())
+                                .notes(notes)
+                                .tags(null)
+                                .image(null)
+                                .isFavorite(isFavorite)
+                                .build();
+        dtos.add(dto);
+
+        return UniversityOneReturnDto.builder()
                 .universities(dtos)
                 .build();
     }
