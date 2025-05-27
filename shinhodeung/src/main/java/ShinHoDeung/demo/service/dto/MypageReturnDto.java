@@ -16,7 +16,7 @@ public class MypageReturnDto {
     private String profileUrl;
     private Integer studentId;
     private String name;
-    private Boolean isCurrentlyEnrolled;
+    private String isCurrentlyEnrolled;
     private String currentSemester;
     private String major;
 
