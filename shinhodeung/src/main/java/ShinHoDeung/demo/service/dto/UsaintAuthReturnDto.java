@@ -24,7 +24,7 @@ public class UsaintAuthReturnDto {
                 .id(this.id)
                 .name(this.name)
                 .major(this.major)
-                .isCurrentlyEnrolled(simplifiedStatus)
+                .studentStatus(simplifiedStatus)
                 .semester(this.semester)
                 .build();
     }

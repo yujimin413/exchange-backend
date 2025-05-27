@@ -50,7 +50,7 @@ public class UserService {
             user.setStudentId(userLoginParamDto.getId());
             user.setMajor(userLoginParamDto.getMajor());
             user.setUserName(userLoginParamDto.getName());
-            user.setIsCurrentlyEnrolled(userLoginParamDto.getIsCurrentlyEnrolled());
+            user.setStudentStatus(userLoginParamDto.getStudentStatus());
             user.setCurrentSemester(userLoginParamDto.getSemester());
         }
         userRepository.save(user);
@@ -197,7 +197,7 @@ public class UserService {
                 .profileUrl(user.getProfileUrl())
                 .studentId(user.getStudentId())
                 .name(user.getUserName())
-                .isCurrentlyEnrolled(user.getIsCurrentlyEnrolled())
+                .studentStatus(user.getStudentStatus())
                 .currentSemester(user.getCurrentSemester())
                 .creditAverage(user.getCreditAverage())
                 .plannedGrade(user.getPlannedGrade())

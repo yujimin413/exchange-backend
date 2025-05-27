@@ -39,8 +39,8 @@ public class User {
     private Integer plannedGrade;
     @Column(name = "planned_semester")
     private Integer plannedSemester;
-    @Column(name = "is_currently_enrolled")
-    private String isCurrentlyEnrolled;
+    @Column(name = "student_status")
+    private String studentStatus;
     @Column(name = "current_semester")
     private String currentSemester;
 
