@@ -16,7 +16,7 @@ public class MypageReturnDto {
     private String profileUrl;
     private Integer studentId;
     private String name;
-    private String isCurrentlyEnrolled;
+    private String studentStatus;
     private String currentSemester;
     private String major;
 
@@ -32,7 +32,7 @@ public class MypageReturnDto {
                 .profileUrl(this.profileUrl)
                 .studentId(this.studentId)
                 .name(this.name)
-                .isCurrentlyEnrolled(this.isCurrentlyEnrolled)
+                .studentStatus(this.studentStatus)
                 .currentSemester(this.currentSemester)
                 .creditAverage(this.creditAverage)
                 .plannedGrade(this.plannedGrade)

@@ -13,7 +13,7 @@ public class UserLoginParamDto {
     private Integer id;
     private String name;
     private String major;
-    private String isCurrentlyEnrolled;
+    private String studentStatus;
     private String semester;
 
     @NotNull
@@ -32,7 +32,7 @@ public class UserLoginParamDto {
                 .studentId(this.id)
                 .userName(this.name)
                 .major(this.major)
-                .isCurrentlyEnrolled(this.isCurrentlyEnrolled)
+                .studentStatus(this.studentStatus)
                 .currentSemester(this.semester)
                 .build();
     }
