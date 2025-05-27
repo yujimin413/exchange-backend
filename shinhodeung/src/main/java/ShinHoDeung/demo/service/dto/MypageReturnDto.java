@@ -4,7 +4,6 @@ import java.util.List;
 
 import ShinHoDeung.demo.controller.dto.MypageResponseDto;
 import ShinHoDeung.demo.controller.dto.NameScore;
-import ShinHoDeung.demo.controller.dto.UserLoginResponseDto;
 import lombok.Builder;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,5 @@
 package ShinHoDeung.demo.service.dto;
 
-import ShinHoDeung.demo.controller.dto.MypageResponseDto;
 import ShinHoDeung.demo.controller.dto.MypageUpdateResponseDto;
 import ShinHoDeung.demo.controller.dto.NameScore;
 import lombok.Builder;
