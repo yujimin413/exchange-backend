@@ -10,5 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface UniversityRepository extends JpaRepository<University, String>, JpaSpecificationExecutor<University> {
-    Optional<University> findByKoreanName(String koreanName);
+    // 지원방법이 여러가지인 대학의 경우 같은 대학이 중복검색됨. -> 상위 1개만 검색
+    Optional<University> findTopByKoreanName(String koreanName);
 }

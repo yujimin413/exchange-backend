@@ -1,7 +1,9 @@
 package ShinHoDeung.demo.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,16 @@ public class SearchService {
     public SearchReturnParamDto getKeywords(String search){
         List<Keyword> keywords = new ArrayList<Keyword>();
         
-        List<KeywordView> keywordViews = keywordViewRepository.findByKeywordStartingWith(search);
+        List<KeywordView> keywordViews = new ArrayList<>();
+        List<KeywordView> startingWords = keywordViewRepository.findByKeywordStartingWith(search);
+        List<KeywordView> containWords = keywordViewRepository.findByKeywordContaining(search);
+        List<KeywordView> rest = containWords.stream()
+        .filter(e -> !startingWords.contains(e))
+        .collect(Collectors.toList());
+        rest.sort(Comparator.comparing(KeywordView::getKeyword));
+        keywordViews.addAll(startingWords);
+        keywordViews.addAll(rest);
+
         for(KeywordView keywordView : keywordViews){
             Detail detail;
             if(keywordView.getType().equals("country")){
@@ -37,7 +48,7 @@ public class SearchService {
                                 .university_count(country.getUniversityCount())
                                 .build();
             } else if(keywordView.getType().equals("university")){
-                University university = universityRepository.findByKoreanName(keywordView.getKeyword()).get();
+                University university = universityRepository.findTopByKoreanName(keywordView.getKeyword()).get();
                 detail = Detail.builder()
                         .region(university.getRegion())
                         .country(university.getCountry())
