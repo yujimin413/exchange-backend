@@ -2,8 +2,8 @@ package ShinHoDeung.demo.controller;
 
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
-import ShinHoDeung.demo.controller.dto.PostDetailResponseDto;
-import ShinHoDeung.demo.controller.dto.PostListPageDto;
+import ShinHoDeung.demo.controller.dto.*;
+import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,5 +49,39 @@ public class PostController {
         PostDetailResponseDto dto = postService.getPostDetail(postId);
         return new CommonResponse(statusCode.SSU2000, dto, statusCode.SSU2000_MSG);
     }
+
+    @PutMapping("/{postId}")
+    public CommonResponse updatePost(@PathVariable Integer postId, @RequestBody PostUpdateRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        postService.updatePost(postId, requestDto, user);
+
+        return new CommonResponse(statusCode.SSU2000, "게시글 수정 완료", statusCode.SSU2000_MSG);
+    }
+
+    @DeleteMapping("/{postId}")
+    public CommonResponse deletePost(@PathVariable Integer postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        postService.deletePost(postId, user);
+
+        return new CommonResponse(statusCode.SSU2000, "게시글 삭제 완료", statusCode.SSU2000_MSG);
+    }
+
+    @PostMapping
+    public CommonResponse createPost(@RequestBody PostCreateRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        PostCreateResponseDto responseDto = postService.createPost(requestDto, user);
+
+        return new CommonResponse(statusCode.SSU2000, responseDto, statusCode.SSU2000_MSG);
+    }
+
+
+
+
 
 }
