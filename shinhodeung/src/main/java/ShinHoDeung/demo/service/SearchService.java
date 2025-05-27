@@ -40,6 +40,7 @@ public class SearchService {
                 University university = universityRepository.findByKoreanName(keywordView.getKeyword()).get();
                 detail = Detail.builder()
                         .region(university.getRegion())
+                        .country(university.getCountry())
                         .english_name(university.getEnglishName())
                         .tags(null)
                         .build();
