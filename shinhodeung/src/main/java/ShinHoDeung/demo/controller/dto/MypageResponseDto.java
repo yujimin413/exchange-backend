@@ -12,7 +12,7 @@ public class MypageResponseDto {
     private String profileUrl;
     private Integer studentId;
     private String name;
-    private Boolean isCurrentlyEnrolled;  // 재학 여부
+    private String isCurrentlyEnrolled;  // 재학 여부
     private String currentSemester; // 현재 학기
     private String major;
 

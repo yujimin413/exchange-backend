@@ -40,7 +40,7 @@ public class User {
     @Column(name = "planned_semester")
     private Integer plannedSemester;
     @Column(name = "is_currently_enrolled")
-    private Boolean isCurrentlyEnrolled;
+    private String isCurrentlyEnrolled;
     @Column(name = "current_semester")
     private String currentSemester;
 
