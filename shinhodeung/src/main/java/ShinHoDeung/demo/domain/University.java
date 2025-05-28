@@ -1,5 +1,7 @@
 package ShinHoDeung.demo.domain;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,4 +74,10 @@ public class University {
 
     @Column(length = 1024)
     private String hashtag;
+
+    @Column(precision = 10, scale = 8)
+    private BigDecimal latitude;
+
+    @Column(precision = 11, scale = 8)
+    private BigDecimal longitude;
 }

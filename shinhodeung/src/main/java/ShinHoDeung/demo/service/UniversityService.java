@@ -71,6 +71,8 @@ public class UniversityService {
                                     .tags(null)
                                     .image(null)
                                     .isFavorite(isFavorite)
+                                    .latitude(university.getLatitude())
+                                    .longitude(university.getLongitude())
                                     .build();
             dtos.add(dto);
         }
@@ -244,6 +246,8 @@ public class UniversityService {
                                     .tags(tags)
                                     .image(null)
                                     .isFavorite(isFavorite)
+                                    .latitude(university.getLatitude())
+                                    .longitude(university.getLongitude())
                                     .build();
             dtos.add(dto);
         }
@@ -291,6 +295,8 @@ public class UniversityService {
                                 .tags(null)
                                 .image(null)
                                 .isFavorite(isFavorite)
+                                .latitude(university.getLatitude())
+                                .longitude(university.getLongitude())
                                 .build();
         dtos.add(dto);
 
