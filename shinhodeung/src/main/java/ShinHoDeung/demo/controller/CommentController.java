@@ -35,7 +35,7 @@ public class CommentController {
 
         commentService.deleteComment(commentId, user);
 
-        return new CommonResponse(statusCode.SSU2000, null, "댓글 삭제 완료");
+        return new CommonResponse(statusCode.SSU2000, "댓글 삭제 완료", "OK");
     }
 
 }

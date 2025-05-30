@@ -4,6 +4,7 @@ import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.*;
 import ShinHoDeung.demo.domain.User;
+import ShinHoDeung.demo.service.CommentService;
 import ShinHoDeung.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class PostController {
 
     private final PostService postService;
     private final StatusCode statusCode;
+    private final CommentService commentService;
 
     @GetMapping("/search")
     public CommonResponse getPostList(
@@ -92,6 +96,17 @@ public class PostController {
         PostLikeResponseDto dto = postService.togglePostLike(postId, user);
 
         return new CommonResponse(statusCode.SSU2000, dto, statusCode.SSU2000_MSG);
+    }
+
+    @GetMapping("/{postId}/comment/search")
+    public CommonResponse getComments(
+            @PathVariable Integer postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createAt")));
+        CommentListPageDto commentListPageDto = commentService.getCommentsByPostId(postId, pageable);
+        return new CommonResponse(statusCode.SSU2000, commentListPageDto, statusCode.SSU2000_MSG);
     }
 
 
