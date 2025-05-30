@@ -30,13 +30,15 @@ public class PostController {
     ) {
         // 인증 정보 가져오기 (인증이 필요한 API)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getPrincipal(); // 실제로는 사용하지 않지만 인증 확인 목적
+        authentication.getPrincipal();
+
+        User loginUser = (User) authentication.getPrincipal();
 
         // 최신순 정렬
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createAt")));
 
         // 서비스 로직 처리
-        PostListPageDto postListPageDto = postService.getPostList(category, pageable);
+        PostListPageDto postListPageDto = postService.getPostList(category, pageable, loginUser);
 
         return new CommonResponse(statusCode.SSU2000, postListPageDto, statusCode.SSU2000_MSG);
     }
@@ -46,7 +48,9 @@ public class PostController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         authentication.getPrincipal(); // 인증 유효성 확보 목적
 
-        PostDetailResponseDto dto = postService.getPostDetail(postId);
+        User user = (User) authentication.getPrincipal();
+
+        PostDetailResponseDto dto = postService.getPostDetail(postId, user);
         return new CommonResponse(statusCode.SSU2000, dto, statusCode.SSU2000_MSG);
     }
 
@@ -80,6 +84,15 @@ public class PostController {
         return new CommonResponse(statusCode.SSU2000, responseDto, statusCode.SSU2000_MSG);
     }
 
+    @PostMapping("/{postId}/like")
+    public CommonResponse toggleLike(@PathVariable Integer postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        PostLikeResponseDto dto = postService.togglePostLike(postId, user);
+
+        return new CommonResponse(statusCode.SSU2000, dto, statusCode.SSU2000_MSG);
+    }
 
 
 

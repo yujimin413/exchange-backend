@@ -13,4 +13,8 @@ public class PostListResponseDto {
     private String category;
     private String authorName; // 익명 여부에 따라 null 또는 이름
     private LocalDateTime createAt;
+
+    private Integer likeCount;
+    private Integer commentCount;
+    private Boolean likedByMe;
 }
