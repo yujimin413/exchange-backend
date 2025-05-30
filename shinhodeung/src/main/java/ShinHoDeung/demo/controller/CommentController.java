@@ -27,4 +27,15 @@ public class CommentController {
         CommentResponseDto responseDto = commentService.addComment(postId, requestDto, user);
         return new CommonResponse(statusCode.SSU2000, responseDto, "OK");
     }
+
+    @DeleteMapping("/comment/{commentId}")
+    public CommonResponse deleteComment(@PathVariable Integer commentId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        commentService.deleteComment(commentId, user);
+
+        return new CommonResponse(statusCode.SSU2000, null, "댓글 삭제 완료");
+    }
+
 }

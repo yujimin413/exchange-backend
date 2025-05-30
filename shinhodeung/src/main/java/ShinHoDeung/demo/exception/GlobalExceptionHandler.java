@@ -25,5 +25,11 @@ public class GlobalExceptionHandler {
                 .body(new CommonResponse(statusCode.SSU4004, null, e.getMessage()));
     }
 
-    // 다른 예외도 추가 가능
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<CommonResponse> handleCommentNotFound(CommentNotFoundException e) {
+        return ResponseEntity.status(404)
+                .body(new CommonResponse(statusCode.SSU4004, null, e.getMessage()));
+    }
+
+
 }
