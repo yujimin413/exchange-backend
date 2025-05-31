@@ -88,6 +88,15 @@ public class UserController {
         return new CommonResponse(statusCode.SSU2000, mypageUpdateReturnDto.toMypageUpdateResponseDto(), statusCode.SSU2000_MSG);
     }
 
+    @PutMapping("/mypage/profile-image")
+    public CommonResponse updateProfileImage(@RequestBody UserProfileUpdateRequestDto requestDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        UserProfileResponseDto updatedDto = userService.updateProfileImage(user, requestDto.getProfileUrl());
+
+        return new CommonResponse(statusCode.SSU2000, updatedDto, "OK");
+    }
 
 
 }

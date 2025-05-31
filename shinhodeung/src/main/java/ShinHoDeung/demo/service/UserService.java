@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import ShinHoDeung.demo.controller.dto.MypageUpdateRequestDto;
 import ShinHoDeung.demo.controller.dto.NameScore;
+import ShinHoDeung.demo.controller.dto.UserProfileResponseDto;
 import ShinHoDeung.demo.service.dto.*;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
@@ -246,6 +247,12 @@ public class UserService {
                 .plannedSemester(user.getPlannedSemester())
                 .languageScores(languageScores)
                 .build();
+    }
+
+    @Transactional
+    public UserProfileResponseDto updateProfileImage(User user, String newProfileUrl) {
+        user.setProfileUrl(newProfileUrl);
+        return user.toUserProfileResponseDto();
     }
 
 
