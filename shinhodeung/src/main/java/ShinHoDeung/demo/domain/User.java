@@ -67,6 +67,7 @@ public class User {
                 .studentId(this.studentId)
                 .name(this.userName)
                 .major(this.major)
+                .profileUrl(this.profileUrl)
                 .build();
     }
 }

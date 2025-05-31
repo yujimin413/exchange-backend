@@ -9,4 +9,5 @@ public class UserProfileResponseDto {
     private Integer studentId;
     private String name;
     private String major;
+    private String profileUrl;
 }
