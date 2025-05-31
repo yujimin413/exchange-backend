@@ -24,11 +24,14 @@ import ShinHoDeung.demo.domain.progress.MainStep;
 import ShinHoDeung.demo.domain.progress.SubStep;
 import ShinHoDeung.demo.domain.progress.UserCurrent;
 import ShinHoDeung.demo.domain.progress.UserResponse;
+import ShinHoDeung.demo.repository.progress.ComponentRepository;
 import ShinHoDeung.demo.repository.progress.CustomCheckPlusRepository;
 import ShinHoDeung.demo.repository.progress.CustomDatePlusRepository;
 import ShinHoDeung.demo.repository.progress.UserCurrentRepository;
 import ShinHoDeung.demo.repository.progress.UserResponseRepository;
+import ShinHoDeung.demo.service.dto.CheckStatusParamDto;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class ProgressService {
     
     private final ProgressTreeBuilder progressTreeBuilder;
+    private final ComponentRepository componentRepository;
     private final UserCurrentRepository userCurrentRepository;
     private final UserResponseRepository userResponseRepository;
     private final CustomCheckPlusRepository customCheckPlusRepository;
@@ -152,5 +156,38 @@ public class ProgressService {
             .subStepOrder(userCurrent.getSubStepOrder())
             .mainStepDtos(mainStepDtos)
             .build();
+    }
+
+    public void changeCheckStatus(CheckStatusParamDto checkStatusParamDto) throws EntityNotFoundException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<UserResponse> result = userResponseRepository.findByUserAndComponentId(user, checkStatusParamDto.getComponentId());
+        UserResponse userResponse;
+
+        if(checkStatusParamDto.getChecked()){
+            if(result.isPresent()){
+                // 이미 userResponse 존재시 checked 문자만 변경
+                userResponse = result.get();
+                if(userResponse.getValue().equals("checked")) return;
+                else{
+                    userResponse.setValue("checked");
+                    userResponseRepository.save(userResponse);
+                }
+            } else {
+                // userResponse 없을 시 추가
+                Optional<Component> component = componentRepository.findById(checkStatusParamDto.getComponentId());
+                if(!component.isPresent())
+                    throw new EntityNotFoundException();
+                userResponse = new UserResponse();
+                userResponse.setComponent(component.get());
+                userResponse.setUser(user);
+                userResponse.setValue("checked");
+                userResponseRepository.save(userResponse);
+            }
+        } else {
+            if(result.isPresent()){
+                userResponseRepository.delete(result.get());
+            }
+        }
     }
 }

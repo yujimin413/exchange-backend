@@ -3,10 +3,14 @@ package ShinHoDeung.demo.domain.progress;
 import ShinHoDeung.demo.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user_response")
 @Getter
+@Setter
+@NoArgsConstructor
 public class UserResponse {
 
     @Id
