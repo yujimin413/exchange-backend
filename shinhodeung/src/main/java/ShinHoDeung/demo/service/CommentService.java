@@ -1,9 +1,6 @@
 package ShinHoDeung.demo.service;
 
-import ShinHoDeung.demo.controller.dto.CommentListPageDto;
-import ShinHoDeung.demo.controller.dto.CommentListResponseDto;
-import ShinHoDeung.demo.controller.dto.CommentRequestDto;
-import ShinHoDeung.demo.controller.dto.CommentResponseDto;
+import ShinHoDeung.demo.controller.dto.*;
 import ShinHoDeung.demo.domain.Comment;
 import ShinHoDeung.demo.domain.Post;
 import ShinHoDeung.demo.domain.User;
@@ -90,6 +87,29 @@ public class CommentService {
                 .isLast(commentPage.isLast())
                 .build();
     }
+
+    @Transactional
+    public CommentResponseDto updateComment(Integer commentId, CommentUpdateRequestDto dto, User loginUser) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException("해당 댓글이 존재하지 않습니다."));
+
+        if (!comment.getUser().getId().equals(loginUser.getId())) {
+            throw new NoPermissionException("작성자만 댓글을 수정할 수 있습니다.");
+        }
+
+        comment.setContent(dto.getContent());
+        comment.setIsAnonymous(Boolean.TRUE.equals(dto.getIsAnonymous()));
+        // 수정 시간 따로 저장하고 싶다면 updatedAt 필드 추가 필요
+
+        return CommentResponseDto.builder()
+                .commentId(comment.getId())
+                .authorName(comment.getIsAnonymous() ? null : loginUser.getUserName())
+                .isAnonymous(comment.getIsAnonymous())
+                .content(comment.getContent())
+                .createdAt(comment.getCreateAt())
+                .build();
+    }
+
 
 
 

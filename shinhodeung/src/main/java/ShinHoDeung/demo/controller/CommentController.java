@@ -4,6 +4,7 @@ import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.CommentRequestDto;
 import ShinHoDeung.demo.controller.dto.CommentResponseDto;
+import ShinHoDeung.demo.controller.dto.CommentUpdateRequestDto;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,16 @@ public class CommentController {
 
         return new CommonResponse(statusCode.SSU2000, "댓글 삭제 완료", "OK");
     }
+
+    @PutMapping("/comment/{commentId}")
+    public CommonResponse updateComment(@PathVariable Integer commentId,
+                                        @RequestBody CommentUpdateRequestDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        CommentResponseDto responseDto = commentService.updateComment(commentId, dto, user);
+        return new CommonResponse(statusCode.SSU2000, responseDto, "OK");
+    }
+
 
 }
