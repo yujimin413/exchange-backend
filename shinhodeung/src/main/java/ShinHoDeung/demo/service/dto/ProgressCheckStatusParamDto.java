@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class CheckStatusParamDto {
+public class ProgressCheckStatusParamDto {
     private Integer componentId;
     private Boolean checked;
 }

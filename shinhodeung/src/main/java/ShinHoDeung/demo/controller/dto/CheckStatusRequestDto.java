@@ -1,6 +1,6 @@
 package ShinHoDeung.demo.controller.dto;
 
-import ShinHoDeung.demo.service.dto.CheckStatusParamDto;
+import ShinHoDeung.demo.service.dto.ProgressCheckStatusParamDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,8 +11,8 @@ import lombok.Setter;
 public class CheckStatusRequestDto {
     private Boolean checked;
 
-    public CheckStatusParamDto toCheckStatusParamDto(Integer componentId){
-        return CheckStatusParamDto.builder()
+    public ProgressCheckStatusParamDto toProgressCheckStatusParamDto(Integer componentId){
+        return ProgressCheckStatusParamDto.builder()
             .checked(checked)
             .componentId(componentId)
             .build();

@@ -29,8 +29,9 @@ import ShinHoDeung.demo.repository.progress.CustomCheckPlusRepository;
 import ShinHoDeung.demo.repository.progress.CustomDatePlusRepository;
 import ShinHoDeung.demo.repository.progress.UserCurrentRepository;
 import ShinHoDeung.demo.repository.progress.UserResponseRepository;
-import ShinHoDeung.demo.service.dto.CheckStatusParamDto;
+import ShinHoDeung.demo.service.dto.ProgressCheckStatusParamDto;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
+import ShinHoDeung.demo.service.dto.ProgressNewStatusParamDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -158,7 +159,7 @@ public class ProgressService {
             .build();
     }
 
-    public void changeCheckStatus(CheckStatusParamDto checkStatusParamDto) throws EntityNotFoundException{
+    public void updateCheckStatus(ProgressCheckStatusParamDto checkStatusParamDto) throws EntityNotFoundException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Optional<UserResponse> result = userResponseRepository.findByUserAndComponentId(user, checkStatusParamDto.getComponentId());
@@ -189,5 +190,21 @@ public class ProgressService {
                 userResponseRepository.delete(result.get());
             }
         }
+    }
+
+    public void updateNewStep(ProgressNewStatusParamDto progressNewStatusParamDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<UserCurrent> result = userCurrentRepository.findByUser(user);
+        UserCurrent userCurrent;
+        if(result.isPresent()){
+            userCurrent = result.get();
+        } else {
+            userCurrent = new UserCurrent();
+            userCurrent.setUser(user);
+        }
+        userCurrent.setMainStepOrder(progressNewStatusParamDto.getMainStepOrder());
+        userCurrent.setSubStepOrder(progressNewStatusParamDto.getSubStepOrder());
+        userCurrentRepository.save(userCurrent);
     }
 }
