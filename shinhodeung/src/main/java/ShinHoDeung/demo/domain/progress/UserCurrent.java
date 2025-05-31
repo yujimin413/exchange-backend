@@ -1,16 +1,18 @@
-package ShinHoDeung.demo.domain.process;
+package ShinHoDeung.demo.domain.progress;
 
 import ShinHoDeung.demo.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "user_current")
-@Getter
-@Setter
+@Builder
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserCurrent {
 
     @Id

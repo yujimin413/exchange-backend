@@ -1,13 +1,15 @@
-package ShinHoDeung.demo.domain.process;
+package ShinHoDeung.demo.domain.progress;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "main_step")
 @Getter
+@Setter
 public class MainStep {
 
     @Id

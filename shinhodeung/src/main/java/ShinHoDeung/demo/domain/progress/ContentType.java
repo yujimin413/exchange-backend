@@ -1,4 +1,4 @@
-package ShinHoDeung.demo.domain.process;
+package ShinHoDeung.demo.domain.progress;
 
 public enum ContentType {
     CAUTION,

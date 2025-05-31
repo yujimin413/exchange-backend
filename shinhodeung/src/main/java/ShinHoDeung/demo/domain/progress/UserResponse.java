@@ -1,10 +1,12 @@
-package ShinHoDeung.demo.domain.process;
+package ShinHoDeung.demo.domain.progress;
 
 import ShinHoDeung.demo.domain.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "user_response")
+@Getter
 public class UserResponse {
 
     @Id

@@ -1,22 +1,24 @@
-package ShinHoDeung.demo.domain.process;
+package ShinHoDeung.demo.domain.progress;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Table(name = "sub_step")
+@Table(name = "detail")
 @Getter
-public class SubStep {
+@Setter
+public class Detail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "main_step_id", nullable = false)
-    private MainStep mainStep;
+    @JoinColumn(name = "sub_step_id", nullable = false)
+    private SubStep subStep;
 
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder;
@@ -24,6 +26,6 @@ public class SubStep {
     @Column(nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "subStep", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Detail> details;
+    @OneToMany(mappedBy = "detail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Component> components;
 }
