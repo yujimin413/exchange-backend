@@ -31,6 +31,7 @@ import ShinHoDeung.demo.repository.progress.UserCurrentRepository;
 import ShinHoDeung.demo.repository.progress.UserResponseRepository;
 import ShinHoDeung.demo.service.dto.ProgressCheckStatusParamDto;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
+import ShinHoDeung.demo.service.dto.ProgressNewCheckboxParamDto;
 import ShinHoDeung.demo.service.dto.ProgressNewStatusParamDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -104,6 +105,7 @@ public class ProgressService {
                                 List<CustomCheckPlus> matches = customCheckPlus.stream()
                                     .filter(r -> r.getComponent().equals(component))
                                     .collect(Collectors.toList());
+                                componentDto.setComponentId(component.getId());
                                 
                                 if(matches.size()!=0){
                                     for(CustomCheckPlus checkbox : matches){
@@ -124,6 +126,8 @@ public class ProgressService {
                                 if (match.isPresent()) {
                                     componentDto.setContentType(ContentType.DATE);
                                     componentDto.setContent(match.get().getDueAt().toString());
+                                } else {
+                                    componentDto.setComponentId(component.getId());
                                 }
                                 break;
                             default:
@@ -206,5 +210,21 @@ public class ProgressService {
         userCurrent.setMainStepOrder(progressNewStatusParamDto.getMainStepOrder());
         userCurrent.setSubStepOrder(progressNewStatusParamDto.getSubStepOrder());
         userCurrentRepository.save(userCurrent);
+    }
+
+    public void addCustomCheckbox(ProgressNewCheckboxParamDto progressNewCheckboxParamDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<Component> result = componentRepository.findById(progressNewCheckboxParamDto.getComponentId());
+        if(!result.isPresent())
+            throw new EntityNotFoundException();
+        
+        CustomCheckPlus customCheckPlus = CustomCheckPlus.builder()
+            .component(result.get())
+            .user(user)
+            .content(progressNewCheckboxParamDto.getContent())
+            .build();
+        
+        customCheckPlusRepository.save(customCheckPlus);
     }
 }

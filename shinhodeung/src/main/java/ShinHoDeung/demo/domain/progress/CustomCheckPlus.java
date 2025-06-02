@@ -2,15 +2,18 @@ package ShinHoDeung.demo.domain.progress;
 
 import ShinHoDeung.demo.domain.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Entity
 @Table(name = "custom_check_plus")
-@Getter
-@Setter
+@Builder
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CustomCheckPlus {
 
     @Id

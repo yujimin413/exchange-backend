@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.CheckStatusRequestDto;
+import ShinHoDeung.demo.controller.dto.ProgressNewCheckboxRequestDto;
 import ShinHoDeung.demo.controller.dto.ProgressNewStepRequestDto;
 import ShinHoDeung.demo.service.ProgressService;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
@@ -53,5 +54,18 @@ public class ProgressController {
         
         return new CommonResponse(statusCode.SSU2000,null,statusCode.SSU2000_MSG);
     }
+
+    @PostMapping("/{componentId}/add/checkbox")
+    public CommonResponse addCustomCheckbox(@PathVariable Integer componentId, @RequestBody ProgressNewCheckboxRequestDto progressNewCheckboxRequestDto) {
+        System.out.println(componentId);
+        try{
+            progressService.addCustomCheckbox(progressNewCheckboxRequestDto.toProgressNewCheckboxParamDto(componentId));
+        } catch(EntityNotFoundException e){
+            return new CommonResponse(statusCode.SSU4000,"존재하지 않는 component Id입니다.",statusCode.SSU4000_MSG);
+        }
+        
+        return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
+    }
+    
     
 }
