@@ -45,9 +45,16 @@ public class PostService {
             int commentCount = commentRepository.countByPost(post);
             boolean likedByMe = postLikeRepository.existsByPostAndUser(post, loginUser);
 
+            // 미리보기 내용: 50자까지만
+            String preview = post.getContent();
+            if (preview.length() > 60) {
+                preview = preview.substring(0, 60);
+            }
+
             return PostListResponseDto.builder()
                     .postId(post.getId())
                     .title(post.getTitle())
+                    .previewContent(preview)
                     .category(post.getCategory())
                     .authorName(Boolean.TRUE.equals(post.getIsAnonymous()) ? null : post.getUser().getUserName())
                     .createAt(post.getCreateAt())
