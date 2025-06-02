@@ -125,6 +125,10 @@ public class UniversityService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Boolean isFavorite = interestedUniversityRepository.existsByUserAndUniversity(user, university);
+
+        String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
+        String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
+
         // notes
         ArrayList<String> notes = new ArrayList<String>();
         String[] lines;
@@ -190,7 +194,7 @@ public class UniversityService {
                 .koreanName(university.getKoreanName())
                 .englishName(university.getEnglishName())
                 .isFavorite(isFavorite)
-                // .image(university.getImage())
+                .image(imageUrl)
                 .website(university.getWebsite())
                 .tags(tags)
                 .programType(university.getProgramType())
