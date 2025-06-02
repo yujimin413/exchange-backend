@@ -17,4 +17,6 @@ public class PostListResponseDto {
     private Integer likeCount;
     private Integer commentCount;
     private Boolean likedByMe;
+
+    private String previewContent;
 }
