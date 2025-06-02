@@ -35,6 +35,8 @@ public class UniversityService {
     private final UniversityRepository universityRepository;
     private final InterestedUniversityRepository interestedUniversityRepository;
     private final ReportRepository reportRepository;
+
+    private static final String S3_IMAGE_BASE_URL = "https://shinhodeung-exchangebucket.s3.ap-northeast-2.amazonaws.com/university-images/downloaded_images/";
     
     @NotNull
     public UniversityAllReturnDto getAllUniversity(){
@@ -60,6 +62,9 @@ public class UniversityService {
             // isFavorite 검사
             Boolean isFavorite = interestedUniversities.stream().anyMatch(u -> university.equals(u.getUniversity()));
 
+            String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
+            String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
+
             // dto build
             UniversityDto dto = UniversityDto.builder()
                                     .id(university.getId())
@@ -69,7 +74,7 @@ public class UniversityService {
                                     .country(university.getCountry())
                                     .notes(notes)
                                     .tags(null)
-                                    .image(null)
+                                    .image(imageUrl)
                                     .isFavorite(isFavorite)
                                     .latitude(university.getLatitude())
                                     .longitude(university.getLongitude())
@@ -230,6 +235,9 @@ public class UniversityService {
             // isFavorite 검사
             Boolean isFavorite = interestedUniversityRepository.existsByUserAndUniversity(user, university);
 
+            String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
+            String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
+
             // tags 분리
             List<String> tags = null;
             if(university.getHashtag()!=null)
@@ -244,7 +252,7 @@ public class UniversityService {
                                     .country(university.getCountry())
                                     .notes(notes)
                                     .tags(tags)
-                                    .image(null)
+                                    .image(imageUrl)
                                     .isFavorite(isFavorite)
                                     .latitude(university.getLatitude())
                                     .longitude(university.getLongitude())
@@ -284,6 +292,9 @@ public class UniversityService {
         // isFavorite 검사
         Boolean isFavorite = interestedUniversities.stream().anyMatch(u -> university.equals(u.getUniversity()));
 
+        String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
+        String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
+
         // dto build
         UniversityDto dto = UniversityDto.builder()
                                 .id(university.getId())
@@ -293,7 +304,7 @@ public class UniversityService {
                                 .country(university.getCountry())
                                 .notes(notes)
                                 .tags(null)
-                                .image(null)
+                                .image(imageUrl)
                                 .isFavorite(isFavorite)
                                 .latitude(university.getLatitude())
                                 .longitude(university.getLongitude())
