@@ -10,6 +10,8 @@ import lombok.*;
 @Data
 public class DetailDto {
     private String title;
+    @JsonProperty("detail-id")
+    private Integer detailId;
 
     @JsonProperty("components")
     private List<ComponentDto> componentDtos;

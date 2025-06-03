@@ -1,5 +1,7 @@
 package ShinHoDeung.demo.controller.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,4 +26,7 @@ public class ComponentDto {
     private String note;
 
     private Boolean checked;
+
+    @JsonProperty("due-at")
+    private LocalDate dueAt;
 }

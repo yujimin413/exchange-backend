@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.CheckStatusRequestDto;
-import ShinHoDeung.demo.controller.dto.ProgressCustomBoxRequestDto;
+import ShinHoDeung.demo.controller.dto.ProgressAddCheckboxResponseDto;
+import ShinHoDeung.demo.controller.dto.ProgressUpdateComponentRequestDto;
 import ShinHoDeung.demo.controller.dto.ProgressNewStepRequestDto;
 import ShinHoDeung.demo.service.ProgressService;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
@@ -44,7 +45,7 @@ public class ProgressController {
     }
     
     
-    @PostMapping("/{componentId}/check")
+    @PostMapping("/component/{componentId}/check")
     public CommonResponse changeCheckStatus(@PathVariable Integer componentId, @RequestBody CheckStatusRequestDto checkStatusRequestDto) {
         try{
             progressService.updateCheckStatus(checkStatusRequestDto.toProgressCheckStatusParamDto(componentId));
@@ -55,10 +56,10 @@ public class ProgressController {
         return new CommonResponse(statusCode.SSU2000,null,statusCode.SSU2000_MSG);
     }
 
-    @PostMapping("/{componentId}/custombox")
-    public CommonResponse addCustomBox(@PathVariable Integer componentId, @RequestBody ProgressCustomBoxRequestDto progressNewCheckboxRequestDto) {
+    @PostMapping("/component/{componentId}/update")
+    public CommonResponse updateComponent(@PathVariable Integer componentId, @RequestBody ProgressUpdateComponentRequestDto progressNewCheckboxRequestDto) {
         try{
-            progressService.addCustomBox(progressNewCheckboxRequestDto.toProgressCustomBoxParamDto(componentId));
+            progressService.updateComponent(progressNewCheckboxRequestDto.toProgressDatePlusParamDto(componentId));
         } catch(EntityNotFoundException e){
             return new CommonResponse(statusCode.SSU4000,"존재하지 않는 component Id입니다.",statusCode.SSU4000_MSG);
         } catch(IllegalArgumentException e){
@@ -66,5 +67,14 @@ public class ProgressController {
         }
         
         return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
+    }
+
+    @PostMapping("/detail/{detailId}/checkbox")
+    public CommonResponse addCheckBox(@PathVariable Integer detailId){
+        
+        Integer componentId = progressService.addCheckBox(detailId);
+        ProgressAddCheckboxResponseDto progressAddCheckboxResponseDto = new ProgressAddCheckboxResponseDto(componentId);
+
+        return new CommonResponse(statusCode.SSU2000, progressAddCheckboxResponseDto, statusCode.SSU2000_MSG);
     }
 }

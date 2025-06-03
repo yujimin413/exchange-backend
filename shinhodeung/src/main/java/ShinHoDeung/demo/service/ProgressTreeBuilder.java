@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.domain.progress.Component;
 import ShinHoDeung.demo.domain.progress.Detail;
 import ShinHoDeung.demo.domain.progress.MainStep;
@@ -22,7 +23,7 @@ public class ProgressTreeBuilder {
     private final DetailRepository detailRepository;
     private final ComponentRepository componentRepository;
 
-    public List<MainStep> build(){
+    public List<MainStep> build(User user){
         List<MainStep> mainSteps = mainStepRepository.findAll();
 
         for (MainStep mainStep : mainSteps) {
@@ -34,7 +35,7 @@ public class ProgressTreeBuilder {
                 subStep.setDetails(details);
 
                 for (Detail detail : details) {
-                    List<Component> components = componentRepository.findByDetail(detail);
+                    List<Component> components = componentRepository.findByUserAndDetail(user, detail);
                     detail.setComponents(components);
                 }
             }

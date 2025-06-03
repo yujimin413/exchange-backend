@@ -26,6 +26,8 @@ public class Detail {
     @Column(nullable = false)
     private String title;
 
+    private Boolean editable;
+
     @OneToMany(mappedBy = "detail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Component> components;
 }

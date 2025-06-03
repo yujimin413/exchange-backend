@@ -1,29 +1,25 @@
 package ShinHoDeung.demo.domain.progress;
 
-import java.time.LocalDate;
-
-import ShinHoDeung.demo.domain.User;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
 
 @Entity
-@Table(name = "component")
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Component {
-
+@Table(name = "meta_component")
+@Getter
+public class MetaComponent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "detail_id", nullable = false)
@@ -38,7 +34,4 @@ public class Component {
 
     @Column(columnDefinition = "TEXT")
     private String note;
-
-    @Column(name = "due_at")
-    private LocalDate dueAt;
 }
