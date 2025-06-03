@@ -1,5 +1,8 @@
 package ShinHoDeung.demo.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,21 +20,19 @@ import ShinHoDeung.demo.controller.dto.SubStepDto;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.domain.progress.Component;
 import ShinHoDeung.demo.domain.progress.ContentType;
-import ShinHoDeung.demo.domain.progress.CustomCheckPlus;
-import ShinHoDeung.demo.domain.progress.CustomDatePlus;
+import ShinHoDeung.demo.domain.progress.CustomBox;
 import ShinHoDeung.demo.domain.progress.Detail;
 import ShinHoDeung.demo.domain.progress.MainStep;
 import ShinHoDeung.demo.domain.progress.SubStep;
 import ShinHoDeung.demo.domain.progress.UserCurrent;
 import ShinHoDeung.demo.domain.progress.UserResponse;
 import ShinHoDeung.demo.repository.progress.ComponentRepository;
-import ShinHoDeung.demo.repository.progress.CustomCheckPlusRepository;
-import ShinHoDeung.demo.repository.progress.CustomDatePlusRepository;
+import ShinHoDeung.demo.repository.progress.CustomBoxRepository;
 import ShinHoDeung.demo.repository.progress.UserCurrentRepository;
 import ShinHoDeung.demo.repository.progress.UserResponseRepository;
 import ShinHoDeung.demo.service.dto.ProgressCheckStatusParamDto;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
-import ShinHoDeung.demo.service.dto.ProgressNewCheckboxParamDto;
+import ShinHoDeung.demo.service.dto.ProgressCustomBoxParamDto;
 import ShinHoDeung.demo.service.dto.ProgressNewStatusParamDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,7 @@ public class ProgressService {
     private final ComponentRepository componentRepository;
     private final UserCurrentRepository userCurrentRepository;
     private final UserResponseRepository userResponseRepository;
-    private final CustomCheckPlusRepository customCheckPlusRepository;
-    private final CustomDatePlusRepository customDatePlusRepository;
+    private final CustomBoxRepository customCheckPlusRepository;
     
 
     public ProgressFlowRetrunDto getProgressFlow(){
@@ -68,8 +68,8 @@ public class ProgressService {
 
         // user 진행상태 불러오기
         List<UserResponse> userResponses = userResponseRepository.findByUser(user);
-        List<CustomCheckPlus> customCheckPlus = customCheckPlusRepository.findByUser(user);
-        List<CustomDatePlus> customDatePlus = customDatePlusRepository.findByUser(user);
+        List<CustomBox> customCheckPlus = customCheckPlusRepository.findByUserAndContentType(user, ContentType.CHECK_BOX);
+        List<CustomBox> customDatePlus = customCheckPlusRepository.findByUserAndContentType(user, ContentType.DATE);
         
         // json build
         List<MainStep> mainSteps = progressTreeBuilder.build();
@@ -102,13 +102,13 @@ public class ProgressService {
                                 componentDto.setChecked(exists);
                                 break;
                             case CHECK_BOX_PLUS:
-                                List<CustomCheckPlus> matches = customCheckPlus.stream()
+                                List<CustomBox> matches = customCheckPlus.stream()
                                     .filter(r -> r.getComponent().equals(component))
                                     .collect(Collectors.toList());
                                 componentDto.setComponentId(component.getId());
                                 
                                 if(matches.size()!=0){
-                                    for(CustomCheckPlus checkbox : matches){
+                                    for(CustomBox checkbox : matches){
                                         ComponentDto subDto = ComponentDto.builder()
                                             .customId(checkbox.getId())
                                             .contentType(ContentType.CHECK_BOX)
@@ -119,13 +119,13 @@ public class ProgressService {
                                 }
                                 break;
                             case DATE_PLUS:
-                                Optional<CustomDatePlus> match = customDatePlus.stream()
+                                Optional<CustomBox> match = customDatePlus.stream()
                                 .filter(r -> r.getComponent().equals(component))
                                 .findFirst();
                             
                                 if (match.isPresent()) {
                                     componentDto.setContentType(ContentType.DATE);
-                                    componentDto.setContent(match.get().getDueAt().toString());
+                                    componentDto.setContent(match.get().getContent());
                                 } else {
                                     componentDto.setComponentId(component.getId());
                                 }
@@ -212,19 +212,33 @@ public class ProgressService {
         userCurrentRepository.save(userCurrent);
     }
 
-    public void addCustomCheckbox(ProgressNewCheckboxParamDto progressNewCheckboxParamDto){
+    public void addCustomBox(ProgressCustomBoxParamDto progressCustomBoxParamDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Optional<Component> result = componentRepository.findById(progressNewCheckboxParamDto.getComponentId());
+        Optional<Component> result = componentRepository.findById(progressCustomBoxParamDto.getComponentId());
         if(!result.isPresent())
             throw new EntityNotFoundException();
+        if(progressCustomBoxParamDto.getContentType().equals(ContentType.DATE)){
+            // 날짜 처리 + 알람 설정
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 H:mm");
+            try {
+                LocalDateTime.parse(progressCustomBoxParamDto.getContent(), formatter);
+            } catch (DateTimeParseException e) {
+                throw new IllegalArgumentException("날짜 형식이 올바르지 않습니다. 예: 2025년 3월 25일 12:30");
+            }
+        } else if(progressCustomBoxParamDto.getContentType().equals(ContentType.CHECK_BOX)) {    
+        } else {
+            throw new IllegalArgumentException("contentType이 올바르지 않습니다.");
+        }
         
-        CustomCheckPlus customCheckPlus = CustomCheckPlus.builder()
+        
+        CustomBox customBox = CustomBox.builder()
             .component(result.get())
+            .contentType(progressCustomBoxParamDto.getContentType())
             .user(user)
-            .content(progressNewCheckboxParamDto.getContent())
+            .content(progressCustomBoxParamDto.getContent())
             .build();
         
-        customCheckPlusRepository.save(customCheckPlus);
+        customCheckPlusRepository.save(customBox);
     }
 }

@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "custom_check_plus")
+@Table(name = "custom_box")
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomCheckPlus {
+public class CustomBox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +30,8 @@ public class CustomCheckPlus {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "content_type", nullable = false)
+    private ContentType contentType;
 }
