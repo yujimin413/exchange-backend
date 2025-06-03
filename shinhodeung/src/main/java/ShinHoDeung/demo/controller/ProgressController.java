@@ -1,5 +1,6 @@
 package ShinHoDeung.demo.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -56,7 +58,7 @@ public class ProgressController {
         return new CommonResponse(statusCode.SSU2000,null,statusCode.SSU2000_MSG);
     }
 
-    @PostMapping("/component/{componentId}/update")
+    @PutMapping("/component/{componentId}")
     public CommonResponse updateComponent(@PathVariable Integer componentId, @RequestBody ProgressUpdateComponentRequestDto progressNewCheckboxRequestDto) {
         try{
             progressService.updateComponent(progressNewCheckboxRequestDto.toProgressDatePlusParamDto(componentId));
@@ -66,6 +68,18 @@ public class ProgressController {
             return new CommonResponse(statusCode.SSU4000,e.getMessage(), statusCode.SSU4000_MSG);
         }
         
+        return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
+    }
+
+    @DeleteMapping("/component/{componentId}")
+    public CommonResponse deleteComponent(@PathVariable Integer componentId) {
+        try{
+            progressService.deleteComponent(componentId);
+        } catch(EntityNotFoundException e){
+            return new CommonResponse(statusCode.SSU4000, "잘못된 componentId입니다.", statusCode.SSU4000_MSG);
+        } catch(IllegalArgumentException e){
+            return new CommonResponse(statusCode.SSU4000, "CHECK_BOX만 삭제 가능합니다.", statusCode.SSU4000_MSG);
+        }
         return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
     }
 

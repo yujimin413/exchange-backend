@@ -237,6 +237,20 @@ public class ProgressService {
         
     }
 
+    public void deleteComponent(Integer componentId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Optional<Component> result = componentRepository.findById(componentId);
+        if(!result.isPresent())
+            throw new EntityNotFoundException();
+        if(!result.get().getUser().equals(user))
+            throw new EntityNotFoundException();
+        if(!result.get().getContentType().equals(ContentType.CHECK_BOX))
+            throw new IllegalArgumentException();
+        
+        componentRepository.delete(result.get());
+    }
+
     public Integer addCheckBox(Integer detailId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
