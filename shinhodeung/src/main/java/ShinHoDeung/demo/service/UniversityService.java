@@ -62,6 +62,11 @@ public class UniversityService {
             // isFavorite 검사
             Boolean isFavorite = interestedUniversities.stream().anyMatch(u -> university.equals(u.getUniversity()));
 
+            // tags 분리
+            List<String> tags = null;
+            if(university.getHashtag()!=null)
+                tags = new ArrayList<>(Arrays.asList(university.getHashtag().split(" ")));
+
             String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
             String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
 
@@ -73,7 +78,7 @@ public class UniversityService {
                                     .region(university.getRegion())
                                     .country(university.getCountry())
                                     .notes(notes)
-                                    .tags(null)
+                                    .tags(tags)
                                     .image(imageUrl)
                                     .isFavorite(isFavorite)
                                     .latitude(university.getLatitude())
@@ -296,6 +301,10 @@ public class UniversityService {
 
         // isFavorite 검사
         Boolean isFavorite = interestedUniversities.stream().anyMatch(u -> university.equals(u.getUniversity()));
+        // tags 분리
+        List<String> tags = null;
+        if(university.getHashtag()!=null)
+            tags = new ArrayList<>(Arrays.asList(university.getHashtag().split(" ")));
 
         String imageFileName = university.getEnglishName().replace(" ", "_") + ".jpg";
         String imageUrl = S3_IMAGE_BASE_URL + imageFileName;
@@ -308,7 +317,7 @@ public class UniversityService {
                                 .region(university.getRegion())
                                 .country(university.getCountry())
                                 .notes(notes)
-                                .tags(null)
+                                .tags(tags)
                                 .image(imageUrl)
                                 .isFavorite(isFavorite)
                                 .latitude(university.getLatitude())
