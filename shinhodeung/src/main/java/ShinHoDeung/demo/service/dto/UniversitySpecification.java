@@ -22,7 +22,7 @@ public class UniversitySpecification {
         "독일어", List.of("E-1", "E-2", "E-3")
     );
 
-    public static Specification<University> filterBy(UniversityFilterParamDto request) {
+    public static Specification<University> filterBy(UniversityFilterParamDto request) throws IllegalArgumentException{
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -51,19 +51,35 @@ public class UniversitySpecification {
             }
 
             if (request.getLanguageSelections() != null && !request.getLanguageSelections().isEmpty()) {
-                List<Predicate> langPredicates = new ArrayList<>();
-                for (LangaugeSelection lang : request.getLanguageSelections()) {
-                    System.out.println(lang.getLanguageRegion());
-                    System.out.println(lang.getTest());
-                    if(map.containsKey(lang.getLanguageRegion())){
-                        Predicate regionMatch = cb.equal(root.get("languageRegion"), lang.getLanguageRegion());
-                        List<String> list = map.get(lang.getLanguageRegion());
-                        List<String> sliced = list.subList(list.indexOf(lang.getTest()), list.size());
-                        Predicate testMatch = root.get("languageRequirement").in(sliced);
-                        langPredicates.add(cb.and(regionMatch, testMatch));
-                    }
+                for(LangaugeSelection lang : request.getLanguageSelections()){
+                    List<String> tests = map.get(lang.getLanguageRegion());
+                    if(tests==null) 
+                        throw new IllegalArgumentException();
+                    if(!tests.contains(lang.getTest())) 
+                        throw new IllegalArgumentException();
                 }
-                predicates.add(cb.or(langPredicates.toArray(new Predicate[0])));
+
+                List<Predicate> langPredicates = new ArrayList<>();
+                for (LangaugeSelection lang : request.getLanguageSelections()){
+                    langPredicates.add(
+                        cb.like(root.get("languageRegion"), "%"+lang.getLanguageRegion()+"%")
+                    );
+                }
+                predicates.add(cb.or(langPredicates.toArray(new Predicate[0])));                
+
+                List<Predicate> testPredicates = new ArrayList<>();
+                for (LangaugeSelection lang : request.getLanguageSelections()){
+                    List<String> list = map.get(lang.getLanguageRegion());
+                    List<String> sliced = list.subList(list.indexOf(lang.getTest()), list.size());
+                    List<Predicate> rangePredicates = new ArrayList<>();
+                    for(String slice : sliced){
+                        rangePredicates.add(
+                            cb.like(root.get("languageRequirement"), "%"+slice+"%")
+                        );
+                    }
+                    testPredicates.add(cb.or(rangePredicates.toArray(new Predicate[0])));
+                }
+                predicates.add(cb.or(testPredicates.toArray(new Predicate[0])));                
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));

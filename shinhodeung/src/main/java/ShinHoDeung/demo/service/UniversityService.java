@@ -220,6 +220,7 @@ public class UniversityService {
 
         // filter find university
         List<University> universities = universityRepository.findAll(UniversitySpecification.filterBy(universityFilterParamDto));
+        
 
         ArrayList<UniversityDto> dtos = new ArrayList<UniversityDto>();
         for(University university: universities){
