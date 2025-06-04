@@ -48,11 +48,26 @@ public class HomeService {
         if(result.isPresent()){
             UniversityChoice universityChoice = result.get();
             if(universityChoice.getUniversity1()!=null)
-                univs.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity1().getId()).order(1).build());
+                univs.add(UnivChoiceDto.builder().
+                    univId(universityChoice.getUniversity1().getId())
+                    .order(1)
+                    .longitude(universityChoice.getUniversity1().getLongitude())
+                    .latitude(universityChoice.getUniversity1().getLatitude())
+                    .build());
             if(universityChoice.getUniversity2()!=null)
-                univs.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity2().getId()).order(2).build());
+                univs.add(UnivChoiceDto.builder().
+                    univId(universityChoice.getUniversity2().getId())
+                    .order(2)
+                    .longitude(universityChoice.getUniversity2().getLongitude())
+                    .latitude(universityChoice.getUniversity2().getLatitude())
+                    .build());
             if(universityChoice.getUniversity3()!=null)
-                univs.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity3().getId()).order(3).build());
+                univs.add(UnivChoiceDto.builder().
+                    univId(universityChoice.getUniversity3().getId())
+                    .order(3)
+                    .longitude(universityChoice.getUniversity3().getLongitude())
+                    .latitude(universityChoice.getUniversity3().getLatitude())
+                    .build());
         }
         
         // 진행상태 불러오기
