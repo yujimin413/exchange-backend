@@ -1,5 +1,6 @@
 package ShinHoDeung.demo.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -16,5 +17,6 @@ public class MainStepDto {
     private int sortOrder;
 
     @JsonProperty("sub_steps")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<SubStepDto> subStepDtos;
 }

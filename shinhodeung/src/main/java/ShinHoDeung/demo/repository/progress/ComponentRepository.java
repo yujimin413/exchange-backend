@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface ComponentRepository extends JpaRepository<Component, Integer>{
     List<Component> findByUserAndDetail(User user, Detail detail);
+    List<Component> findByUser(User user);
 }

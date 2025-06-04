@@ -14,9 +14,6 @@ import lombok.*;
 public class ComponentDto {
     @JsonProperty("component_id")
     private Integer componentId;
-
-    @JsonProperty("custom_id")
-    private Integer customId;
     
     @JsonProperty("type")
     private ContentType contentType;

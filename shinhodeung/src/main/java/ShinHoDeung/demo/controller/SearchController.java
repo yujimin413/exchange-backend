@@ -8,17 +8,19 @@ import ShinHoDeung.demo.service.SearchService;
 import ShinHoDeung.demo.service.dto.SearchReturnParamDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
+@RequestMapping("/search")
 @RequiredArgsConstructor
 public class SearchController {
     
     private final SearchService searchService;
     private final StatusCode statusCode;
 
-    @GetMapping("/search")
+    @GetMapping
     public CommonResponse recommendSearchKeyword(@RequestParam String search) {
         System.out.println(search);
         SearchReturnParamDto searchReturnParamDto = searchService.getKeywords(search);

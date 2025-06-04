@@ -10,7 +10,6 @@ import ShinHoDeung.demo.common.CommonResponse;
 import ShinHoDeung.demo.common.StatusCode;
 import ShinHoDeung.demo.controller.dto.CheckStatusRequestDto;
 import ShinHoDeung.demo.controller.dto.ProgressAddCheckboxResponseDto;
-import ShinHoDeung.demo.controller.dto.ProgressGetUnivChoiceResponseDto;
 import ShinHoDeung.demo.controller.dto.ProgressUpdateComponentRequestDto;
 import ShinHoDeung.demo.controller.dto.ProgressNewStepRequestDto;
 import ShinHoDeung.demo.controller.dto.ProgressPostUnivChoiceRequestDto;
@@ -22,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -90,9 +88,14 @@ public class ProgressController {
 
     @PostMapping("/detail/{detailId}/checkbox")
     public CommonResponse addCheckBox(@PathVariable Integer detailId){
+        ProgressAddCheckboxResponseDto progressAddCheckboxResponseDto;
+        try{
+            Integer componentId = progressService.addCheckBox(detailId);
+            progressAddCheckboxResponseDto = new ProgressAddCheckboxResponseDto(componentId);
+        } catch (EntityNotFoundException e){
+            return new CommonResponse(statusCode.SSU4000, "잘못된 detailId입니다.", statusCode.SSU4000_MSG);
+        }
         
-        Integer componentId = progressService.addCheckBox(detailId);
-        ProgressAddCheckboxResponseDto progressAddCheckboxResponseDto = new ProgressAddCheckboxResponseDto(componentId);
 
         return new CommonResponse(statusCode.SSU2000, progressAddCheckboxResponseDto, statusCode.SSU2000_MSG);
     }
