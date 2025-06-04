@@ -48,22 +48,25 @@ public class HomeService {
         if(result.isPresent()){
             UniversityChoice universityChoice = result.get();
             if(universityChoice.getUniversity1()!=null)
-                univs.add(UnivChoiceDto.builder().
-                    univId(universityChoice.getUniversity1().getId())
+                univs.add(UnivChoiceDto.builder()
+                    .univId(universityChoice.getUniversity1().getId())
+                    .name(universityChoice.getUniversity1().getKoreanName())
                     .order(1)
                     .longitude(universityChoice.getUniversity1().getLongitude())
                     .latitude(universityChoice.getUniversity1().getLatitude())
                     .build());
             if(universityChoice.getUniversity2()!=null)
-                univs.add(UnivChoiceDto.builder().
-                    univId(universityChoice.getUniversity2().getId())
+                univs.add(UnivChoiceDto.builder()
+                    .univId(universityChoice.getUniversity2().getId())
+                    .name(universityChoice.getUniversity2().getKoreanName())
                     .order(2)
                     .longitude(universityChoice.getUniversity2().getLongitude())
                     .latitude(universityChoice.getUniversity2().getLatitude())
                     .build());
             if(universityChoice.getUniversity3()!=null)
-                univs.add(UnivChoiceDto.builder().
-                    univId(universityChoice.getUniversity3().getId())
+                univs.add(UnivChoiceDto.builder()
+                    .univId(universityChoice.getUniversity3().getId())
+                    .name(universityChoice.getUniversity3().getKoreanName())
                     .order(3)
                     .longitude(universityChoice.getUniversity3().getLongitude())
                     .latitude(universityChoice.getUniversity3().getLatitude())

@@ -14,6 +14,7 @@ import lombok.Data;
 public class UnivChoiceDto {
     @JsonProperty("university_id")
     private String univId;
+    private String name;
     private Integer order;
     private BigDecimal latitude;
     private BigDecimal longitude;
