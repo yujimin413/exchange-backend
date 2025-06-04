@@ -304,6 +304,14 @@ public class ProgressService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Map<Integer, University> univs = new HashMap<>();
+        
+        UniversityChoice universityChoice;
+        Optional<UniversityChoice> choiceOpt = universityChoiceRepository.findByUser(user);
+        if(!choiceOpt.isPresent())
+            universityChoice = UniversityChoice.builder().build();
+        else
+            universityChoice = choiceOpt.get();
+        
         for(UnivChoiceDto univChoiceDto : progressPostUnivChoiceParamDto.getUnivs()){
             Optional<University> result = universityRepository.findById(univChoiceDto.getUnivId());
             if(!result.isPresent())
@@ -311,12 +319,10 @@ public class ProgressService {
             univs.put(univChoiceDto.getOrder(), result.get());
         }
 
-        UniversityChoice universityChoice = UniversityChoice.builder()
-            .user(user)
-            .university1(univs.get(1))
-            .university2(univs.get(2))
-            .university3(univs.get(3))
-            .build();
+        universityChoice.setUser(user);
+        universityChoice.setUniversity1(univs.get(1));
+        universityChoice.setUniversity2(univs.get(2));
+        universityChoice.setUniversity3(univs.get(3));
         
         universityChoiceRepository.save(universityChoice);
     }
