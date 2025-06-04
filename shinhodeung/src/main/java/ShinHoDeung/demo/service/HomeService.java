@@ -70,7 +70,7 @@ public class HomeService {
         }
 
         // d-day있는 component 불러오기
-        List<ComponentDto> componentDtos = null;
+        List<ComponentDto> componentDtos = new ArrayList<>();
         List<Component> components = componentRepository.findByUser(user);
         if(components.size() != 0){
             // chekced component set 미리 확보
