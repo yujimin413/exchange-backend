@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,9 @@ import ShinHoDeung.demo.controller.dto.ComponentDto;
 import ShinHoDeung.demo.controller.dto.DetailDto;
 import ShinHoDeung.demo.controller.dto.MainStepDto;
 import ShinHoDeung.demo.controller.dto.SubStepDto;
+import ShinHoDeung.demo.controller.dto.UnivChoiceDto;
+import ShinHoDeung.demo.domain.University;
+import ShinHoDeung.demo.domain.UniversityChoice;
 import ShinHoDeung.demo.domain.User;
 import ShinHoDeung.demo.domain.progress.Component;
 import ShinHoDeung.demo.domain.progress.ContentType;
@@ -26,6 +31,8 @@ import ShinHoDeung.demo.domain.progress.MetaComponent;
 import ShinHoDeung.demo.domain.progress.SubStep;
 import ShinHoDeung.demo.domain.progress.UserCurrent;
 import ShinHoDeung.demo.domain.progress.UserResponse;
+import ShinHoDeung.demo.repository.UniversityChoiceRepository;
+import ShinHoDeung.demo.repository.UniversityRepository;
 import ShinHoDeung.demo.repository.progress.ComponentRepository;
 import ShinHoDeung.demo.repository.progress.DetailRepository;
 import ShinHoDeung.demo.repository.progress.MetaComponentRepository;
@@ -33,8 +40,10 @@ import ShinHoDeung.demo.repository.progress.UserCurrentRepository;
 import ShinHoDeung.demo.repository.progress.UserResponseRepository;
 import ShinHoDeung.demo.service.dto.ProgressCheckStatusParamDto;
 import ShinHoDeung.demo.service.dto.ProgressFlowRetrunDto;
+import ShinHoDeung.demo.service.dto.ProgressGetUnivChoiceReturnDto;
 import ShinHoDeung.demo.service.dto.ProgressUpdateComponentParamDto;
 import ShinHoDeung.demo.service.dto.ProgressNewStatusParamDto;
+import ShinHoDeung.demo.service.dto.ProgressPostUnivChoiceParamDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -48,9 +57,9 @@ public class ProgressService {
     private final ComponentRepository componentRepository;
     private final UserCurrentRepository userCurrentRepository;
     private final UserResponseRepository userResponseRepository;
-    
-    
-    
+
+    private final UniversityChoiceRepository universityChoiceRepository;
+    private final UniversityRepository universityRepository;
 
     public ProgressFlowRetrunDto getProgressFlow(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -267,5 +276,48 @@ public class ProgressService {
         component = componentRepository.save(component);
 
         return component.getId();
+    }
+
+    public ProgressGetUnivChoiceReturnDto getUnivSelection(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Optional<UniversityChoice> result = universityChoiceRepository.findByUser(user);
+        if(!result.isPresent())
+            return ProgressGetUnivChoiceReturnDto.builder().build();
+        
+        UniversityChoice universityChoice = result.get();
+        List<UnivChoiceDto> dtos = new ArrayList<>();
+        if(universityChoice.getUniversity1()!=null)
+            dtos.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity1().getId()).order(1).build());
+        if(universityChoice.getUniversity2()!=null)
+            dtos.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity2().getId()).order(2).build());
+        if(universityChoice.getUniversity3()!=null)
+            dtos.add(UnivChoiceDto.builder().univId(universityChoice.getUniversity3().getId()).order(3).build());
+
+        return ProgressGetUnivChoiceReturnDto.builder()
+            .univs(dtos)
+            .build();
+    }
+
+    public void postUnivSelection(ProgressPostUnivChoiceParamDto progressPostUnivChoiceParamDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Map<Integer, University> univs = new HashMap<>();
+        for(UnivChoiceDto univChoiceDto : progressPostUnivChoiceParamDto.getUnivs()){
+            Optional<University> result = universityRepository.findById(univChoiceDto.getUnivId());
+            if(!result.isPresent())
+                throw new EntityNotFoundException();
+            univs.put(univChoiceDto.getOrder(), result.get());
+        }
+
+        UniversityChoice universityChoice = UniversityChoice.builder()
+            .user(user)
+            .university1(univs.get(1))
+            .university2(univs.get(2))
+            .university3(univs.get(3))
+            .build();
+        
+        universityChoiceRepository.save(universityChoice);
     }
 }
