@@ -8,10 +8,10 @@ import lombok.*;
 @Builder
 @Data
 public class SubStepDto {
-    @JsonProperty("sub-step-name")
+    @JsonProperty("sub_step_name")
     private String title;
 
-    @JsonProperty("sub-step-num")
+    @JsonProperty("sub_step_num")
     private int sortOrder;
 
     @JsonProperty("details")

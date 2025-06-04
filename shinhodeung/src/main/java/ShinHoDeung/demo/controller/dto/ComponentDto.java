@@ -12,10 +12,10 @@ import lombok.*;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ComponentDto {
-    @JsonProperty("component-id")
+    @JsonProperty("component_id")
     private Integer componentId;
 
-    @JsonProperty("custom-id")
+    @JsonProperty("custom_id")
     private Integer customId;
     
     @JsonProperty("type")
@@ -27,6 +27,6 @@ public class ComponentDto {
 
     private Boolean checked;
 
-    @JsonProperty("due-at")
+    @JsonProperty("due_at")
     private LocalDate dueAt;
 }

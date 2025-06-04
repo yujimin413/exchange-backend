@@ -9,12 +9,12 @@ import lombok.*;
 @Data
 public class MainStepDto {
 
-    @JsonProperty("main-step-name")
+    @JsonProperty("main_step_name")
     private String title;
 
-    @JsonProperty("main-step-num")
+    @JsonProperty("main_step_num")
     private int sortOrder;
 
-    @JsonProperty("sub-steps")
+    @JsonProperty("sub_steps")
     private List<SubStepDto> subStepDtos;
 }

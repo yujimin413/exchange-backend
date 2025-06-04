@@ -11,12 +11,12 @@ import lombok.Data;
 @Data
 public class ProgressFlowResponseDto {
     
-    @JsonProperty("user-main-step")
+    @JsonProperty("user_main_step")
     private int mainStepOrder;
     
-    @JsonProperty("user-sub-step")
+    @JsonProperty("user_sub_step")
     private int subStepOrder;
     
-    @JsonProperty("main-steps")
+    @JsonProperty("main_steps")
     private List<MainStepDto> mainSteps;
 }
