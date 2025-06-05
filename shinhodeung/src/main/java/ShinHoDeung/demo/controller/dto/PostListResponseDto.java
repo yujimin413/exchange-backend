@@ -19,4 +19,5 @@ public class PostListResponseDto {
     private Boolean likedByMe;
 
     private String previewContent;
+    private Boolean isMine;
 }

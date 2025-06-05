@@ -13,4 +13,5 @@ public class CommentListResponseDto {
     private Boolean isAnonymous;
     private String content;
     private LocalDateTime createdAt;
+    private Boolean isMine;
 }

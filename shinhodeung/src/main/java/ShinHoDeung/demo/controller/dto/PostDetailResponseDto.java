@@ -19,5 +19,6 @@ public class PostDetailResponseDto {
     private Integer likeCount;
     private Integer commentCount;
     private Boolean likedByMe;
+    private Boolean isMine;
 
 }

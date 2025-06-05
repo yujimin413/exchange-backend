@@ -50,8 +50,6 @@ public class PostController {
     @GetMapping("/{postId}")
     public CommonResponse getPostDetail(@PathVariable Integer postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getPrincipal(); // 인증 유효성 확보 목적
-
         User user = (User) authentication.getPrincipal();
 
         PostDetailResponseDto dto = postService.getPostDetail(postId, user);
@@ -104,8 +102,11 @@ public class PostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createAt")));
-        CommentListPageDto commentListPageDto = commentService.getCommentsByPostId(postId, pageable);
+        CommentListPageDto commentListPageDto = commentService.getCommentsByPostId(postId, pageable, user);
         return new CommonResponse(statusCode.SSU2000, commentListPageDto, statusCode.SSU2000_MSG);
     }
 

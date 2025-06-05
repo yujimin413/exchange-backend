@@ -31,5 +31,12 @@ public class GlobalExceptionHandler {
                 .body(new CommonResponse(statusCode.SSU4004, null, e.getMessage()));
     }
 
+    @ExceptionHandler(InvalidCategoryException.class)
+    public ResponseEntity<CommonResponse> handleInvalidCategory(InvalidCategoryException e) {
+        return ResponseEntity.status(400)
+                .body(new CommonResponse(statusCode.SSU4000, null, e.getMessage()));
+    }
+
+
 
 }
