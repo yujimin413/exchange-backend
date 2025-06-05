@@ -11,6 +11,8 @@ import ShinHoDeung.demo.repository.CommentRepository;
 import ShinHoDeung.demo.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +65,7 @@ public class CommentService {
     }
 
 
-    public CommentListPageDto getCommentsByPostId(Integer postId, Pageable pageable) {
+    public CommentListPageDto getCommentsByPostId(Integer postId, Pageable pageable, User user) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("해당 게시글이 존재하지 않습니다."));
 
@@ -76,6 +78,7 @@ public class CommentService {
                         .isAnonymous(comment.getIsAnonymous())
                         .content(comment.getContent())
                         .createdAt(comment.getCreateAt())
+                        .isMine(comment.getUser().getId().equals(user.getId()))
                         .build()
         ).toList();
 

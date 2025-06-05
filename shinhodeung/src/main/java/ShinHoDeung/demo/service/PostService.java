@@ -2,8 +2,10 @@ package ShinHoDeung.demo.service;
 
 import ShinHoDeung.demo.controller.dto.*;
 import ShinHoDeung.demo.domain.Post;
+import ShinHoDeung.demo.domain.PostCategory;
 import ShinHoDeung.demo.domain.PostLike;
 import ShinHoDeung.demo.domain.User;
+import ShinHoDeung.demo.exception.InvalidCategoryException;
 import ShinHoDeung.demo.exception.NoPermissionException;
 import ShinHoDeung.demo.exception.PostNotFoundException;
 import ShinHoDeung.demo.repository.CommentRepository;
@@ -44,6 +46,7 @@ public class PostService {
             int likeCount = postLikeRepository.countByPost(post);
             int commentCount = commentRepository.countByPost(post);
             boolean likedByMe = postLikeRepository.existsByPostAndUser(post, loginUser);
+            boolean isMine = post.getUser().getId().equals(loginUser.getId());
 
             // 미리보기 내용: 100자까지만
             String preview = post.getContent();
@@ -61,6 +64,7 @@ public class PostService {
                     .likeCount(likeCount)
                     .commentCount(commentCount)
                     .likedByMe(likedByMe)
+                    .isMine(isMine)
                     .build();
         }).toList();
 
@@ -81,6 +85,7 @@ public class PostService {
         int likeCount = postLikeRepository.countByPost(post);
         int commentCount = commentRepository.countByPost(post);
         boolean likedByMe = postLikeRepository.existsByPostAndUser(post, loginUser);
+        boolean isMine = post.getUser().getId().equals(loginUser.getId());
 
         return PostDetailResponseDto.builder()
                 .postId(post.getId())
@@ -93,11 +98,16 @@ public class PostService {
                 .likeCount(likeCount)
                 .commentCount(commentCount)
                 .likedByMe(likedByMe)
+                .isMine(isMine)
                 .build();
     }
 
     @Transactional
     public void updatePost(Integer postId, PostUpdateRequestDto dto, User loginUser) {
+        if (!PostCategory.isValid(dto.getCategory())) {
+            throw new InvalidCategoryException("카테고리는 Q&A, 꿀팁, 자유 중 하나여야 합니다.");
+        }
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
@@ -130,6 +140,10 @@ public class PostService {
 
     @Transactional
     public PostCreateResponseDto createPost(PostCreateRequestDto dto, User user) {
+        if (!PostCategory.isValid(dto.getCategory())) {
+            throw new InvalidCategoryException("카테고리는 Q&A, 꿀팁, 자유 중 하나여야 합니다.");
+        }
+
         Post post = new Post();
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
