@@ -113,7 +113,7 @@ public class ProgressService {
                             .content(component.getContent())
                             .note(component.getNote())
                             .build();
-                        if(component.getContentType().equals(ContentType.CHECK_BOX)){
+                        if(component.getContentType().equals(ContentType.CHECK_BOX)||component.getContentType().equals(ContentType.CAUTION)){
                             boolean exists = userResponses.stream()
                                     .anyMatch(r -> r.getComponent().equals(component)&& r.getValue().equals("checked"));
                             componentDto.setComponentId(component.getId());
