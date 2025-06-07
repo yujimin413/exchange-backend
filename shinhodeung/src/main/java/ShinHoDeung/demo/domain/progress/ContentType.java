@@ -8,5 +8,6 @@ public enum ContentType {
     INFO,
     BUTTON,
     CHECK_BOX_PLUS,
-    DATE_PLUS
+    DATE_PLUS,
+    QUESTION
 }
