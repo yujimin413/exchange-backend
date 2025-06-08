@@ -15,7 +15,7 @@ public class UniversitySpecification {
 
     private static final Map<String, List<String>> map = Map.of(
         "영어(비유럽)", List.of("A-1", "A-2", "A-3", "A-4", "A-5"),
-        "영어(유럽)", List.of("A-1", "B-1", "B-2", "C-1", "C-2"),
+        "영어(유럽)", List.of("A-2", "B-1", "B-2", "C-1", "C-2"),
         "중국어", List.of("B-1", "B-2", "B-3"),
         "일본어", List.of("C-1", "C-2"),
         "프랑스어", List.of("D-1", "D-2", "D-3"),
