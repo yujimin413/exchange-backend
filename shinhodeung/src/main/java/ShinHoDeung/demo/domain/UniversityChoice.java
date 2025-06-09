@@ -20,7 +20,7 @@ public class UniversityChoice {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "university_id_1", nullable = false)
+    @JoinColumn(name = "university_id_1")
     private University university1;
 
     @ManyToOne(fetch = FetchType.LAZY)
